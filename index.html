@@ -16,7 +16,7 @@ body{
   overflow-x:hidden;
 }
 
-/* FONDO ANIME */
+/* FONDO */
 body::before{
   content:"";
   position:fixed;
@@ -29,8 +29,8 @@ body::before{
 }
 
 @keyframes fondoMove{
-  0%{transform:scale(1) translate(0,0);}
-  100%{transform:scale(1.2) translate(-20px,20px);}
+  0%{transform:scale(1)}
+  100%{transform:scale(1.2)}
 }
 
 /* PARTICULAS */
@@ -42,7 +42,7 @@ body::before{
 }
 
 /* CONTENIDO */
-header,.container,#vista-dia,.discord{
+header,.container,#vista-dia,.discord,#contador{
   position:relative;
   z-index:2;
 }
@@ -50,6 +50,15 @@ header,.container,#vista-dia,.discord{
 /* HEADER */
 header{text-align:center;padding:40px}
 .subtitle{opacity:0.7;letter-spacing:3px}
+
+/* CONTADOR */
+#contador{
+  text-align:center;
+  opacity:0.6;
+  font-size:13px;
+  margin-top:-10px;
+  margin-bottom:20px;
+}
 
 /* GRID */
 .container{
@@ -82,7 +91,7 @@ header{text-align:center;padding:40px}
   position:absolute;
   inset:0;
   background:linear-gradient(to top,rgba(0,0,0,0.9),transparent);
-  pointer-events:none; /* 🔥 ESTO ARREGLA TODO */
+  pointer-events:none;
 }
 .card h3{position:absolute;bottom:10px;left:10px;z-index:2}
 .preview{
@@ -167,6 +176,11 @@ header{text-align:center;padding:40px}
   <div class="subtitle">HORARIOS DE PUBLICACIÓN</div>
 </header>
 
+<!-- CONTADOR -->
+<div id="contador">
+  👁️ <span id="views">0</span> personas vieron los horarios
+</div>
+
 <!-- INICIO -->
 <div class="container" id="inicio">
 
@@ -206,15 +220,11 @@ const data={
 };
 
 function mostrarDia(dia){
-  const inicio=document.getElementById("inicio");
-  const vista=document.getElementById("vista-dia");
-  const titulo=document.getElementById("titulo");
+  document.getElementById("inicio").style.display="none";
+  document.getElementById("vista-dia").classList.add("active");
+
+  document.getElementById("titulo").innerText=dia.toUpperCase();
   const contenido=document.getElementById("contenido");
-
-  inicio.style.display="none";
-  vista.classList.add("active");
-
-  titulo.innerText=dia.toUpperCase();
   contenido.innerHTML="";
 
   if(data[dia].length===0){
@@ -237,7 +247,13 @@ function volver(){
   document.getElementById("vista-dia").classList.remove("active");
 }
 
-/* PARTICULAS NIVEL DIOS */
+/* CONTADOR */
+let visitas = localStorage.getItem("visitas_horarios");
+visitas = visitas ? parseInt(visitas)+1 : 1;
+localStorage.setItem("visitas_horarios", visitas);
+document.getElementById("views").innerText = visitas.toLocaleString();
+
+/* PARTICULAS */
 const canvas=document.getElementById("particles");
 const ctx=canvas.getContext("2d");
 
@@ -256,17 +272,14 @@ for(let i=0;i<100;i++){
 
 function draw(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
-
   p.forEach(a=>{
     a.x+=a.vx;
     a.y+=a.vy;
-
     ctx.beginPath();
     ctx.arc(a.x,a.y,2,0,Math.PI*2);
     ctx.fillStyle="rgba(168,85,247,0.8)";
     ctx.fill();
   });
-
   requestAnimationFrame(draw);
 }
 draw();
