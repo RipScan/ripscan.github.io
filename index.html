@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RipScan | Inicio</title>
+<title>RipScan</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
@@ -11,195 +11,159 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
 
 body{
-  background:url('fondo.jpg') center/cover no-repeat fixed;
+  background:#0d0d0d;
   color:white;
-}
-
-/* FONDO */
-body::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  background:
-    radial-gradient(circle at 20% 30%, rgba(168,85,247,0.2), transparent),
-    radial-gradient(circle at 80% 70%, rgba(88,101,242,0.2), transparent);
-  animation:fondoMove 12s infinite alternate ease-in-out;
-  z-index:1;
-}
-
-@keyframes fondoMove{
-  0%{transform:scale(1)}
-  100%{transform:scale(1.2)}
-}
-
-/* PARTICULAS */
-#particles{
-  position:fixed;
-  inset:0;
-  z-index:0;
-}
-
-/* CONTENIDO */
-header,.container,.nav,.footer{
-  position:relative;
-  z-index:2;
 }
 
 /* NAV */
 .nav{
   display:flex;
-  justify-content:center;
-  gap:20px;
-  padding:20px;
-}
-.nav a{
-  text-decoration:none;
-  color:white;
-  opacity:0.7;
-}
-.nav a:hover{
-  opacity:1;
+  justify-content:space-between;
+  padding:15px;
+  max-width:1200px;
+  margin:auto;
 }
 
-/* HEADER */
-header{text-align:center;padding:20px}
-h1{font-size:28px}
+input{
+  padding:8px;
+  border-radius:8px;
+  border:none;
+  width:200px;
+}
 
-/* GRID */
+/* GRID MÁS CHICO */
 .container{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
-  gap:25px;
+  grid-template-columns:repeat(auto-fill,minmax(110px,1fr));
+  gap:10px;
   padding:20px;
-  max-width:1100px;
+  max-width:1200px;
   margin:auto;
 }
 
 /* CARD */
 .card{
-  position:relative;
-  border-radius:18px;
+  background:#1a1a1a;
+  border-radius:8px;
   overflow:hidden;
-  transition:0.4s;
+  position:relative;
+  transition:0.3s;
 }
+
 .card img{
   width:100%;
   aspect-ratio:2/3;
-  object-fit:cover;
 }
-.card::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:linear-gradient(to top,rgba(0,0,0,0.9),transparent);
+
+.card:hover{
+  transform:scale(1.05);
 }
+
 .info{
+  padding:6px;
+  font-size:11px;
+}
+
+/* BADGES */
+.badge{
   position:absolute;
-  bottom:10px;
-  left:10px;
-  z-index:2;
-  font-size:13px;
+  top:4px;
+  right:4px;
+  background:#a855f7;
+  font-size:9px;
+  padding:2px 5px;
+  border-radius:5px;
 }
 
-/* HOVER */
-.card:hover{transform:scale(1.05)}
-
-/* CUERVO */
-#cuervo{
-  position:fixed;
-  top:20%;
-  left:-200px;
-  width:100px;
-  z-index:2;
-  animation:vuelo 20s linear infinite;
-}
-@keyframes vuelo{
-  0%{left:-200px}
-  100%{left:110%}
+/* FAVORITO */
+.fav{
+  position:absolute;
+  top:4px;
+  left:4px;
+  cursor:pointer;
 }
 
 /* FOOTER */
 .footer{
   text-align:center;
   opacity:0.5;
-  font-size:12px;
-  margin:40px 0 20px;
+  font-size:11px;
+  margin:30px;
 }
 </style>
 </head>
 
 <body>
 
-<canvas id="particles"></canvas>
-<img src="cuervo.gif" id="cuervo">
-
-<!-- NAV -->
 <div class="nav">
-  <a href="index.html">Inicio</a>
-  <a href="horarios.html">Horarios</a>
+  <div>RipScan</div>
+  <input type="text" id="search" placeholder="Buscar...">
 </div>
 
-<header>
-  <h1>Últimos capítulos</h1>
-</header>
+<div class="container" id="caps"></div>
 
-<div class="container">
-
-<div class="card">
-  <img src="reyhongo.png">
-  <div class="info">
-    El ascenso del Rey Hongo<br>
-    Cap 10 • hace 2h
-  </div>
-</div>
-
-<div class="card">
-  <img src="margrave.png">
-  <div class="info">
-    El mago sin valor del Margrave<br>
-    Cap 5 • hace 1 día
-  </div>
-</div>
-
-</div>
-
-<!-- FOOTER -->
 <div class="footer">
-  Los horarios pueden variar sin previo aviso. <br>
-  <span style="opacity:0.7;">RipScan ©</span>
+  Los horarios pueden variar sin previo aviso.
 </div>
 
 <script>
-/* PARTICULAS */
-const canvas=document.getElementById("particles");
-const ctx=canvas.getContext("2d");
+/* DATA */
+let capsData = [
+  {nombre:"Rey Hongo", cap:10, img:"reyhongo.png", fecha:"2026-04-20"},
+  {nombre:"Margrave", cap:5, img:"margrave.png", fecha:"2026-04-19"},
+  {nombre:"Pequeño Mundo", cap:3, img:"pequenomundo.png", fecha:"2026-04-18"}
+];
 
-canvas.width=innerWidth;
-canvas.height=innerHeight;
+/* FAVORITOS */
+let favs = JSON.parse(localStorage.getItem("favs")||"[]");
 
-let p=[];
-for(let i=0;i<80;i++){
-  p.push({
-    x:Math.random()*innerWidth,
-    y:Math.random()*innerHeight,
-    vx:(Math.random()-0.5),
-    vy:(Math.random()-0.5)
+function toggleFav(nombre){
+  if(favs.includes(nombre)){
+    favs = favs.filter(f=>f!==nombre);
+  }else{
+    favs.push(nombre);
+  }
+  localStorage.setItem("favs", JSON.stringify(favs));
+  render();
+}
+
+/* RENDER */
+function render(){
+  const cont = document.getElementById("caps");
+  cont.innerHTML="";
+
+  let filtro = document.getElementById("search").value.toLowerCase();
+
+  let data = capsData
+    .sort((a,b)=> new Date(b.fecha)-new Date(a.fecha));
+
+  data.forEach(c=>{
+    if(!c.nombre.toLowerCase().includes(filtro)) return;
+
+    let badge="";
+    if((new Date()-new Date(c.fecha))/1000 < 86400){
+      badge='<div class="badge">NEW</div>';
+    }
+
+    let fav = favs.includes(c.nombre) ? "⭐" : "☆";
+
+    cont.innerHTML+=`
+    <div class="card">
+      <div class="fav" onclick="toggleFav('${c.nombre}')">${fav}</div>
+      ${badge}
+      <img src="${c.img}">
+      <div class="info">
+        ${c.nombre}<br>
+        Cap ${c.cap}
+      </div>
+    </div>`;
   });
 }
 
-function draw(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  p.forEach(a=>{
-    a.x+=a.vx;
-    a.y+=a.vy;
-    ctx.beginPath();
-    ctx.arc(a.x,a.y,2,0,Math.PI*2);
-    ctx.fillStyle="rgba(168,85,247,0.8)";
-    ctx.fill();
-  });
-  requestAnimationFrame(draw);
-}
-draw();
+/* BUSCADOR */
+document.getElementById("search").addEventListener("input", render);
+
+render();
 </script>
 
 </body>
