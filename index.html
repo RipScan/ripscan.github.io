@@ -16,6 +16,7 @@ body{
   overflow-x:hidden;
 }
 
+/* FONDO */
 body::before{
   content:"";
   position:fixed;
@@ -32,6 +33,7 @@ body::before{
   100%{transform:scale(1.2)}
 }
 
+/* PARTICULAS */
 #particles{
   position:fixed;
   inset:0;
@@ -39,11 +41,13 @@ body::before{
   pointer-events:none;
 }
 
-header,.container,#vista-dia,.discord,#contador{
+/* CONTENIDO */
+header,.container,#vista-dia,.discord,#contador,.footer{
   position:relative;
   z-index:2;
 }
 
+/* HEADER */
 header{text-align:center;padding:40px}
 .subtitle{opacity:0.7;letter-spacing:3px}
 
@@ -56,6 +60,7 @@ header{text-align:center;padding:40px}
   margin-bottom:20px;
 }
 
+/* GRID */
 .container{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
@@ -65,6 +70,7 @@ header{text-align:center;padding:40px}
   margin:auto;
 }
 
+/* CARD */
 .card{
   position:relative;
   border-radius:18px;
@@ -99,12 +105,14 @@ header{text-align:center;padding:40px}
   z-index:2;
 }
 
+/* HOVER */
 .card:hover{transform:translateY(-10px) scale(1.05)}
 .card:hover img{transform:scale(1.15)}
 
 #vista-dia{display:none;opacity:0;transition:0.4s}
 #vista-dia.active{display:block;opacity:1}
 
+/* BOTON VOLVER */
 .volver{
   display:flex;
   align-items:center;
@@ -122,6 +130,7 @@ header{text-align:center;padding:40px}
   box-shadow:0 0 20px #a855f7;
 }
 
+/* DISCORD */
 .discord{
   position:fixed;
   bottom:20px;
@@ -141,6 +150,7 @@ header{text-align:center;padding:40px}
   box-shadow:0 0 20px #5865F2;
 }
 
+/* CUERVO */
 #cuervo{
   position:fixed;
   top:20%;
@@ -152,6 +162,15 @@ header{text-align:center;padding:40px}
 @keyframes vuelo{
   0%{left:-200px}
   100%{left:110%}
+}
+
+/* FOOTER */
+.footer{
+  text-align:center;
+  opacity:0.5;
+  font-size:12px;
+  margin:40px 0 20px;
+  letter-spacing:1px;
 }
 </style>
 </head>
@@ -165,10 +184,12 @@ header{text-align:center;padding:40px}
   <div class="subtitle">HORARIOS DE PUBLICACIÓN</div>
 </header>
 
+<!-- CONTADOR -->
 <div id="contador">
   👁️ <span id="views">0</span> personas vieron los horarios
 </div>
 
+<!-- INICIO -->
 <div class="container" id="inicio">
 
 <div class="card" onclick="mostrarDia('lunes')"><img src="reyhongo.png"><div class="preview">El ascenso del Rey Hongo</div><h3>LUNES</h3></div>
@@ -181,6 +202,7 @@ header{text-align:center;padding:40px}
 
 </div>
 
+<!-- VISTA DIA -->
 <div id="vista-dia">
   <button class="volver" onclick="volver()">
     <img src="volver.png" width="18"> Volver
@@ -193,6 +215,12 @@ header{text-align:center;padding:40px}
 <a class="discord" href="https://discord.gg/js8B2VgNcd" target="_blank">
   <img src="discord.gif" width="20"> Discord
 </a>
+
+<!-- FOOTER -->
+<footer class="footer">
+  Los horarios pueden variar sin previo aviso. <br>
+  <span style="opacity:0.7;">RipScan ©</span>
+</footer>
 
 <script>
 const data={
