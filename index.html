@@ -16,7 +16,6 @@ body{
   overflow-x:hidden;
 }
 
-/* FONDO */
 body::before{
   content:"";
   position:fixed;
@@ -33,7 +32,6 @@ body::before{
   100%{transform:scale(1.2)}
 }
 
-/* PARTICULAS */
 #particles{
   position:fixed;
   inset:0;
@@ -41,13 +39,11 @@ body::before{
   pointer-events:none;
 }
 
-/* CONTENIDO */
 header,.container,#vista-dia,.discord,#contador{
   position:relative;
   z-index:2;
 }
 
-/* HEADER */
 header{text-align:center;padding:40px}
 .subtitle{opacity:0.7;letter-spacing:3px}
 
@@ -60,7 +56,6 @@ header{text-align:center;padding:40px}
   margin-bottom:20px;
 }
 
-/* GRID */
 .container{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
@@ -70,7 +65,6 @@ header{text-align:center;padding:40px}
   margin:auto;
 }
 
-/* CARD */
 .card{
   position:relative;
   border-radius:18px;
@@ -105,15 +99,12 @@ header{text-align:center;padding:40px}
   z-index:2;
 }
 
-/* HOVER */
 .card:hover{transform:translateY(-10px) scale(1.05)}
 .card:hover img{transform:scale(1.15)}
 
-/* VISTA DIA */
 #vista-dia{display:none;opacity:0;transition:0.4s}
 #vista-dia.active{display:block;opacity:1}
 
-/* BOTON VOLVER */
 .volver{
   display:flex;
   align-items:center;
@@ -131,7 +122,6 @@ header{text-align:center;padding:40px}
   box-shadow:0 0 20px #a855f7;
 }
 
-/* DISCORD */
 .discord{
   position:fixed;
   bottom:20px;
@@ -151,7 +141,6 @@ header{text-align:center;padding:40px}
   box-shadow:0 0 20px #5865F2;
 }
 
-/* CUERVO */
 #cuervo{
   position:fixed;
   top:20%;
@@ -176,12 +165,10 @@ header{text-align:center;padding:40px}
   <div class="subtitle">HORARIOS DE PUBLICACIÓN</div>
 </header>
 
-<!-- CONTADOR -->
 <div id="contador">
   👁️ <span id="views">0</span> personas vieron los horarios
 </div>
 
-<!-- INICIO -->
 <div class="container" id="inicio">
 
 <div class="card" onclick="mostrarDia('lunes')"><img src="reyhongo.png"><div class="preview">El ascenso del Rey Hongo</div><h3>LUNES</h3></div>
@@ -194,7 +181,6 @@ header{text-align:center;padding:40px}
 
 </div>
 
-<!-- VISTA DIA -->
 <div id="vista-dia">
   <button class="volver" onclick="volver()">
     <img src="volver.png" width="18"> Volver
@@ -228,7 +214,7 @@ function mostrarDia(dia){
   contenido.innerHTML="";
 
   if(data[dia].length===0){
-    contenido.innerHTML="<p style='text-align:center;opacity:0.6;'>No hay manhwas todavía</p>";
+    contenido.innerHTML="<p style='text-align:center;opacity:0.6;'>No hay proyectos programados para este día.</p>";
     return;
   }
 
@@ -252,6 +238,30 @@ let visitas = localStorage.getItem("visitas_horarios");
 visitas = visitas ? parseInt(visitas)+1 : 1;
 localStorage.setItem("visitas_horarios", visitas);
 document.getElementById("views").innerText = visitas.toLocaleString();
+
+/* HOY AUTOMATICO */
+const diasSemana = ["domingo","lunes","martes","miercoles","jueves","viernes","sabado"];
+const hoy = diasSemana[new Date().getDay()];
+
+document.querySelectorAll(".card").forEach(card => {
+  const onclick = card.getAttribute("onclick");
+  if(onclick && onclick.includes(hoy)){
+    card.style.boxShadow = "0 0 25px #a855f7";
+
+    const badge = document.createElement("div");
+    badge.innerText = "🔥 HOY";
+    badge.style.position = "absolute";
+    badge.style.top = "10px";
+    badge.style.right = "10px";
+    badge.style.background = "#a855f7";
+    badge.style.padding = "4px 10px";
+    badge.style.borderRadius = "10px";
+    badge.style.fontSize = "12px";
+    badge.style.fontWeight = "bold";
+
+    card.appendChild(badge);
+  }
+});
 
 /* PARTICULAS */
 const canvas=document.getElementById("particles");
