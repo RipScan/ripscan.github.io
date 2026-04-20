@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RipScan | Horarios</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+
+body{
+  background:url('fondo.jpg') center/cover no-repeat fixed;
+  color:white;
+  overflow-x:hidden;
+}
+
+/* FONDO ANIME */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(168,85,247,0.2), transparent),
+    radial-gradient(circle at 80% 70%, rgba(88,101,242,0.2), transparent);
+  animation:fondoMove 12s infinite alternate ease-in-out;
+  z-index:1;
+}
+
+@keyframes fondoMove{
+  0%{transform:scale(1) translate(0,0);}
+  100%{transform:scale(1.2) translate(-20px,20px);}
+}
+
+/* PARTICULAS */
+#particles{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+}
+
+/* CONTENIDO */
+header,.container,#vista-dia,.discord{
+  position:relative;
+  z-index:2;
+}
+
+/* HEADER */
+header{text-align:center;padding:40px}
+.subtitle{opacity:0.7;letter-spacing:3px}
+
+/* GRID */
+.container{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:25px;
+  padding:20px;
+  max-width:1100px;
+  margin:auto;
+}
+
+/* CARD */
+.card{
+  position:relative;
+  border-radius:18px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:0.4s;
+  max-width:220px;
+  margin:auto;
+}
+.card img{
+  width:100%;
+  aspect-ratio:2/3;
+  object-fit:cover;
+  transition:0.5s;
+}
+.card::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to top,rgba(0,0,0,0.9),transparent);
+  pointer-events:none; /* 🔥 ESTO ARREGLA TODO */
+}
+.card h3{position:absolute;bottom:10px;left:10px;z-index:2}
+.preview{
+  position:absolute;
+  bottom:30px;
+  left:10px;
+  font-size:12px;
+  background:rgba(0,0,0,0.6);
+  padding:4px 8px;
+  border-radius:6px;
+  z-index:2;
+}
+
+/* HOVER */
+.card:hover{transform:translateY(-10px) scale(1.05)}
+.card:hover img{transform:scale(1.15)}
+
+/* VISTA DIA */
+#vista-dia{display:none;opacity:0;transition:0.4s}
+#vista-dia.active{display:block;opacity:1}
+
+/* BOTON VOLVER */
+.volver{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin:20px;
+  padding:10px 18px;
+  border-radius:12px;
+  background:rgba(0,0,0,0.6);
+  border:1px solid #a855f7;
+  color:white;
+  cursor:pointer;
+}
+.volver:hover{
+  background:#a855f7;
+  box-shadow:0 0 20px #a855f7;
+}
+
+/* DISCORD */
+.discord{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 18px;
+  border-radius:12px;
+  background:rgba(0,0,0,0.6);
+  border:1px solid #5865F2;
+  text-decoration:none;
+  color:white;
+}
+.discord:hover{
+  background:#5865F2;
+  box-shadow:0 0 20px #5865F2;
+}
+
+/* CUERVO */
+#cuervo{
+  position:fixed;
+  top:20%;
+  left:-200px;
+  width:100px;
+  z-index:2;
+  animation:vuelo 20s linear infinite;
+}
+@keyframes vuelo{
+  0%{left:-200px}
+  100%{left:110%}
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="particles"></canvas>
+<img src="cuervo.gif" id="cuervo">
+
+<header>
+  <div class="subtitle">HORARIOS DE PUBLICACIÓN</div>
+</header>
+
+<!-- INICIO -->
+<div class="container" id="inicio">
+
+<div class="card" onclick="mostrarDia('lunes')"><img src="reyhongo.png"><div class="preview">Rey Hongo</div><h3>LUNES</h3></div>
+<div class="card" onclick="mostrarDia('martes')"><img src="proximamente.png"><div class="preview">Próximamente</div><h3>MARTES</h3></div>
+<div class="card" onclick="mostrarDia('miercoles')"><img src="proximamente.png"><div class="preview">Próximamente</div><h3>MIÉRCOLES</h3></div>
+<div class="card" onclick="mostrarDia('jueves')"><img src="proximamente.png"><div class="preview">Próximamente</div><h3>JUEVES</h3></div>
+<div class="card" onclick="mostrarDia('viernes')"><img src="proximamente.png"><div class="preview">Próximamente</div><h3>VIERNES</h3></div>
+<div class="card" onclick="mostrarDia('sabado')"><img src="proximamente.png"><div class="preview">Próximamente</div><h3>SÁBADO</h3></div>
+<div class="card" onclick="mostrarDia('domingo')"><img src="margrave.png"><div class="preview">Margrave</div><h3>DOMINGO</h3></div>
+
+</div>
+
+<!-- VISTA DIA -->
+<div id="vista-dia">
+  <button class="volver" onclick="volver()">
+    <img src="volver.png" width="18"> Volver
+  </button>
+
+  <h2 id="titulo" style="text-align:center;margin-bottom:20px;"></h2>
+  <div class="container" id="contenido"></div>
+</div>
+
+<a class="discord" href="https://discord.gg/js8B2VgNcd" target="_blank">
+  <img src="discord.gif" width="20"> Discord
+</a>
+
+<script>
+const data={
+  lunes:[{nombre:"Rey Hongo",img:"reyhongo.png",link:"https://manhwaweb.com/manhwa/el-ascenso-del-rey-hongo_1776286372224"}],
+  martes:[],
+  miercoles:[],
+  jueves:[],
+  viernes:[],
+  sabado:[],
+  domingo:[{nombre:"Margrave",img:"margrave.png",link:"https://manhwaweb.com/manhwa/el-mago-sin-valor-del-margrave_1776633397302"}]
+};
+
+function mostrarDia(dia){
+  const inicio=document.getElementById("inicio");
+  const vista=document.getElementById("vista-dia");
+  const titulo=document.getElementById("titulo");
+  const contenido=document.getElementById("contenido");
+
+  inicio.style.display="none";
+  vista.classList.add("active");
+
+  titulo.innerText=dia.toUpperCase();
+  contenido.innerHTML="";
+
+  if(data[dia].length===0){
+    contenido.innerHTML="<p style='text-align:center;opacity:0.6;'>No hay manhwas todavía</p>";
+    return;
+  }
+
+  data[dia].forEach(m=>{
+    contenido.innerHTML+=`
+    <div class="card">
+      <img src="${m.img}">
+      <h3>${m.nombre}</h3>
+      <a href="${m.link}" target="_blank" style="position:absolute;inset:0;"></a>
+    </div>`;
+  });
+}
+
+function volver(){
+  document.getElementById("inicio").style.display="grid";
+  document.getElementById("vista-dia").classList.remove("active");
+}
+
+/* PARTICULAS NIVEL DIOS */
+const canvas=document.getElementById("particles");
+const ctx=canvas.getContext("2d");
+
+canvas.width=innerWidth;
+canvas.height=innerHeight;
+
+let p=[];
+for(let i=0;i<100;i++){
+  p.push({
+    x:Math.random()*innerWidth,
+    y:Math.random()*innerHeight,
+    vx:(Math.random()-0.5),
+    vy:(Math.random()-0.5)
+  });
+}
+
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  p.forEach(a=>{
+    a.x+=a.vx;
+    a.y+=a.vy;
+
+    ctx.beginPath();
+    ctx.arc(a.x,a.y,2,0,Math.PI*2);
+    ctx.fillStyle="rgba(168,85,247,0.8)";
+    ctx.fill();
+  });
+
+  requestAnimationFrame(draw);
+}
+draw();
+</script>
+
+</body>
+</html>
