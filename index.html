@@ -51,14 +51,6 @@ header,.container,#vista-dia,.discord,#contador,.footer{
 header{text-align:center;padding:40px}
 .subtitle{opacity:0.7;letter-spacing:3px}
 
-/* CONTADOR */
-#contador{
-  text-align:center;
-  opacity:0.6;
-  font-size:13px;
-  margin-top:-10px;
-  margin-bottom:20px;
-}
 
 /* GRID */
 .container{
@@ -184,10 +176,6 @@ header{text-align:center;padding:40px}
   <div class="subtitle">HORARIOS DE PUBLICACIÓN</div>
 </header>
 
-<!-- CONTADOR -->
-<div id="contador">
-  👁️ <span id="views">0</span> personas vieron los horarios
-</div>
 
 <!-- INICIO -->
 <div class="container" id="inicio">
@@ -261,11 +249,6 @@ function volver(){
   document.getElementById("vista-dia").classList.remove("active");
 }
 
-/* CONTADOR */
-let visitas = localStorage.getItem("visitas_horarios");
-visitas = visitas ? parseInt(visitas)+1 : 1;
-localStorage.setItem("visitas_horarios", visitas);
-document.getElementById("views").innerText = visitas.toLocaleString();
 
 /* HOY AUTOMATICO */
 const diasSemana = ["domingo","lunes","martes","miercoles","jueves","viernes","sabado"];
