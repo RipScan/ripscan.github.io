@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RipScan | Horarios</title>
-<link rel="icon" href="ripscan.ico">
+<link rel="icon" href="ripscan.ico" type="image/x-icon">
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
@@ -17,7 +17,6 @@ body{
   overflow-x:hidden;
 }
 
-/* FONDO */
 body::before{
   content:"";
   position:fixed;
@@ -28,6 +27,7 @@ body::before{
   animation:fondoMove 12s infinite alternate ease-in-out;
   z-index:1;
 }
+
 @keyframes fondoMove{
   0%{transform:scale(1)}
   100%{transform:scale(1.2)}
@@ -40,95 +40,14 @@ body::before{
   pointer-events:none;
 }
 
-header,.container,#vista-dia,.discord,.footer,.hero{
+header,.container,#vista-dia,.discord,.footer{
   position:relative;
   z-index:2;
 }
 
-header{text-align:center;padding:30px}
+header{text-align:center;padding:40px}
 .subtitle{opacity:0.7;letter-spacing:3px}
 
-/* ================= CARRUSEL ================= */
-.hero{
-  position:relative;
-  width:100%;
-  height:400px;
-  overflow:hidden;
-  margin-bottom:30px;
-}
-
-.slide{
-  position:absolute;
-  inset:0;
-  opacity:0;
-  transition:0.6s;
-}
-
-.slide.active{opacity:1}
-
-.slide img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
-.slide::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:linear-gradient(to right,rgba(0,0,0,0.85),transparent);
-}
-
-.info{
-  position:absolute;
-  top:50%;
-  left:60px;
-  transform:translateY(-50%);
-  z-index:2;
-  max-width:400px;
-}
-
-.info h1{
-  font-size:32px;
-  margin-bottom:10px;
-}
-
-.info p{
-  opacity:0.7;
-  margin-bottom:15px;
-}
-
-.btn{
-  padding:10px 18px;
-  background:#a855f7;
-  border-radius:10px;
-  text-decoration:none;
-  color:white;
-  transition:0.3s;
-}
-.btn:hover{
-  background:#9333ea;
-  box-shadow:0 0 15px #a855f7;
-}
-
-/* FLECHAS */
-.prev,.next{
-  position:absolute;
-  top:50%;
-  transform:translateY(-50%);
-  background:rgba(0,0,0,0.5);
-  border:none;
-  color:white;
-  font-size:30px;
-  padding:10px 15px;
-  cursor:pointer;
-  z-index:3;
-}
-.prev{left:10px}
-.next{right:10px}
-.prev:hover,.next:hover{background:#a855f7}
-
-/* ================= GRID ================= */
 .container{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
@@ -178,6 +97,9 @@ header{text-align:center;padding:30px}
 #vista-dia.active{display:block;opacity:1}
 
 .volver{
+  display:flex;
+  align-items:center;
+  gap:8px;
   margin:20px;
   padding:10px 18px;
   border-radius:12px;
@@ -210,6 +132,19 @@ header{text-align:center;padding:30px}
   box-shadow:0 0 20px #5865F2;
 }
 
+#cuervo{
+  position:fixed;
+  top:20%;
+  left:-200px;
+  width:100px;
+  z-index:2;
+  animation:vuelo 20s linear infinite;
+}
+@keyframes vuelo{
+  0%{left:-200px}
+  100%{left:110%}
+}
+
 .footer{
   text-align:center;
   opacity:0.5;
@@ -222,128 +157,145 @@ header{text-align:center;padding:30px}
 <body>
 
 <canvas id="particles"></canvas>
+<img src="cuervo.gif" id="cuervo">
 
 <header>
   <div class="subtitle">HORARIOS DE PUBLICACIÓN</div>
 </header>
 
-<!-- ================= CARRUSEL ================= -->
-<div class="hero">
-
-  <div class="slide active">
-    <img src="reyhongo.png">
-    <div class="info">
-      <h1>El ascenso del Rey Hongo</h1>
-      <p>Nuevo capítulo disponible</p>
-      <a href="#" class="btn">Leer ahora</a>
-    </div>
-  </div>
-
-  <div class="slide">
-    <img src="desierto.png">
-    <div class="info">
-      <h1>El mago de arena del desierto abrasador</h1>
-      <p>Disponible los jueves</p>
-      <a href="#" class="btn">Ver detalles</a>
-    </div>
-  </div>
-
-  <div class="slide">
-    <img src="margrave.png">
-    <div class="info">
-      <h1>El mago sin valor del Margrave</h1>
-      <p>Disponible los domingos</p>
-      <a href="#" class="btn">Leer ahora</a>
-    </div>
-  </div>
-
-  <button class="prev">‹</button>
-  <button class="next">›</button>
-
-</div>
-
-<!-- GRID -->
 <div class="container" id="inicio">
+
 <div class="card" onclick="mostrarDia('lunes')"><img src="reyhongo.png"><h3>LUNES</h3></div>
 <div class="card" onclick="mostrarDia('martes')"><img src="proximamente.png"><div class="preview">Próximamente</div><h3>MARTES</h3></div>
 <div class="card" onclick="mostrarDia('miercoles')"><img src="pequenomundo.png"><h3>MIÉRCOLES</h3></div>
+
+<!-- JUEVES MODIFICADO -->
 <div class="card" onclick="mostrarDia('jueves')"><img src="desierto.png"><h3>JUEVES</h3></div>
+
 <div class="card" onclick="mostrarDia('viernes')"><img src="proximamente.png"><div class="preview">Próximamente</div><h3>VIERNES</h3></div>
 <div class="card" onclick="mostrarDia('sabado')"><img src="proximamente.png"><div class="preview">Próximamente</div><h3>SÁBADO</h3></div>
 <div class="card" onclick="mostrarDia('domingo')"><img src="margrave.png"><h3>DOMINGO</h3></div>
+
 </div>
 
 <div id="vista-dia">
-<button class="volver" onclick="volver()">Volver</button>
-<h2 id="titulo" style="text-align:center;margin-bottom:20px;"></h2>
-<div class="container" id="contenido"></div>
+  <button class="volver" onclick="volver()">
+    <img src="volver.png" width="18"> Volver
+  </button>
+
+  <h2 id="titulo" style="text-align:center;margin-bottom:20px;"></h2>
+  <div class="container" id="contenido"></div>
 </div>
 
+<a class="discord" href="https://discord.gg/js8B2VgNcd" target="_blank">
+  <img src="discord.gif" width="20"> Discord
+</a>
+
 <footer class="footer">
-RipScan ©
+  Los horarios pueden variar sin previo aviso. <br>
+  <span style="opacity:0.7;">RipScan ©</span>
 </footer>
 
 <script>
 const data={
-lunes:[{nombre:"El ascenso del Rey Hongo",img:"reyhongo.png",link:"#"}],
-martes:[],
-miercoles:[{nombre:"Un pequeño mundo lleno de diversion",img:"pequenomundo.png",link:"#"}],
-jueves:[{nombre:"El mago de arena del desierto abrasador",img:"desierto.png",link:"#"}],
-viernes:[],
-sabado:[],
-domingo:[{nombre:"El mago sin valor del Margrave",img:"margrave.png",link:"#"}]
+  lunes:[{nombre:"El ascenso del Rey Hongo",img:"reyhongo.png",link:"https://manhwaweb.com/manhwa/el-ascenso-del-rey-hongo_1776286372224"}],
+  martes:[],
+  miercoles:[{nombre:"Un pequeño mundo lleno de diversion",img:"pequenomundo.png",link:"https://manhwaweb.com/manhwa/un-pequeo-mundo-lleno-de-diversion_1776474759366"}],
+
+  // JUEVES AGREGADO
+  jueves:[
+    {
+      nombre:"El mago de arena del desierto abrasador",
+      img:"desierto.png",
+      link:"#"
+    }
+  ],
+
+  viernes:[],
+  sabado:[],
+  domingo:[{nombre:"El mago sin valor del Margrave",img:"margrave.png",link:"https://manhwaweb.com/manhwa/el-mago-sin-valor-del-margrave_1776633397302"}]
 };
 
 function mostrarDia(dia){
-document.getElementById("inicio").style.display="none";
-document.getElementById("vista-dia").classList.add("active");
+  document.getElementById("inicio").style.display="none";
+  document.getElementById("vista-dia").classList.add("active");
 
-document.getElementById("titulo").innerText=dia.toUpperCase();
-const contenido=document.getElementById("contenido");
-contenido.innerHTML="";
+  document.getElementById("titulo").innerText=dia.toUpperCase();
+  const contenido=document.getElementById("contenido");
+  contenido.innerHTML="";
 
-if(data[dia].length===0){
-contenido.innerHTML="<p style='text-align:center;opacity:0.6;'>No hay proyectos.</p>";
-return;
-}
+  if(data[dia].length===0){
+    contenido.innerHTML="<p style='text-align:center;opacity:0.6;'>No hay proyectos programados para este día.</p>";
+    return;
+  }
 
-data[dia].forEach(m=>{
-contenido.innerHTML+=`
-<div class="card">
-<img src="${m.img}">
-<h3>${m.nombre}</h3>
-</div>`;
-});
+  data[dia].forEach(m=>{
+    contenido.innerHTML+=`
+    <div class="card">
+      <img src="${m.img}">
+      <h3>${m.nombre}</h3>
+      <a href="${m.link}" target="_blank" style="position:absolute;inset:0;"></a>
+    </div>`;
+  });
 }
 
 function volver(){
-document.getElementById("inicio").style.display="grid";
-document.getElementById("vista-dia").classList.remove("active");
+  document.getElementById("inicio").style.display="grid";
+  document.getElementById("vista-dia").classList.remove("active");
 }
 
-/* CARRUSEL */
-let slides=document.querySelectorAll(".slide");
-let index=0;
+const diasSemana = ["domingo","lunes","martes","miercoles","jueves","viernes","sabado"];
+const hoy = diasSemana[new Date().getDay()];
 
-function showSlide(i){
-slides.forEach(s=>s.classList.remove("active"));
-slides[i].classList.add("active");
+document.querySelectorAll(".card").forEach(card => {
+  const onclick = card.getAttribute("onclick");
+  if(onclick && onclick.includes(hoy)){
+    card.style.boxShadow = "0 0 25px #a855f7";
+
+    const badge = document.createElement("div");
+    badge.innerText = "🔥 HOY";
+    badge.style.position = "absolute";
+    badge.style.top = "10px";
+    badge.style.right = "10px";
+    badge.style.background = "#a855f7";
+    badge.style.padding = "4px 10px";
+    badge.style.borderRadius = "10px";
+    badge.style.fontSize = "12px";
+    badge.style.fontWeight = "bold";
+
+    card.appendChild(badge);
+  }
+});
+
+const canvas=document.getElementById("particles");
+const ctx=canvas.getContext("2d");
+
+canvas.width=innerWidth;
+canvas.height=innerHeight;
+
+let p=[];
+for(let i=0;i<100;i++){
+  p.push({
+    x:Math.random()*innerWidth,
+    y:Math.random()*innerHeight,
+    vx:(Math.random()-0.5),
+    vy:(Math.random()-0.5)
+  });
 }
 
-document.querySelector(".next").onclick=()=>{
-index=(index+1)%slides.length;
-showSlide(index);
-};
-
-document.querySelector(".prev").onclick=()=>{
-index=(index-1+slides.length)%slides.length;
-showSlide(index);
-};
-
-setInterval(()=>{
-index=(index+1)%slides.length;
-showSlide(index);
-},5000);
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  p.forEach(a=>{
+    a.x+=a.vx;
+    a.y+=a.vy;
+    ctx.beginPath();
+    ctx.arc(a.x,a.y,2,0,Math.PI*2);
+    ctx.fillStyle="rgba(168,85,247,0.8)";
+    ctx.fill();
+  });
+  requestAnimationFrame(draw);
+}
+draw();
 </script>
 
 </body>
