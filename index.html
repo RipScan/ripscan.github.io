@@ -17,7 +17,6 @@ body{
   overflow-x:hidden;
 }
 
-/* FONDO */
 body::before{
   content:"";
   position:fixed;
@@ -34,7 +33,6 @@ body::before{
   100%{transform:scale(1.2)}
 }
 
-/* PARTICULAS */
 #particles{
   position:fixed;
   inset:0;
@@ -42,18 +40,14 @@ body::before{
   pointer-events:none;
 }
 
-/* CONTENIDO */
-header,.container,#vista-dia,.discord,#contador,.footer{
+header,.container,#vista-dia,.discord,.footer{
   position:relative;
   z-index:2;
 }
 
-/* HEADER */
 header{text-align:center;padding:40px}
 .subtitle{opacity:0.7;letter-spacing:3px}
 
-
-/* GRID */
 .container{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
@@ -63,7 +57,6 @@ header{text-align:center;padding:40px}
   margin:auto;
 }
 
-/* CARD */
 .card{
   position:relative;
   border-radius:18px;
@@ -84,7 +77,6 @@ header{text-align:center;padding:40px}
   position:absolute;
   inset:0;
   background:linear-gradient(to top,rgba(0,0,0,0.9),transparent);
-  pointer-events:none;
 }
 .card h3{position:absolute;bottom:10px;left:10px;z-index:2}
 .preview{
@@ -98,14 +90,12 @@ header{text-align:center;padding:40px}
   z-index:2;
 }
 
-/* HOVER */
 .card:hover{transform:translateY(-10px) scale(1.05)}
 .card:hover img{transform:scale(1.15)}
 
 #vista-dia{display:none;opacity:0;transition:0.4s}
 #vista-dia.active{display:block;opacity:1}
 
-/* BOTON VOLVER */
 .volver{
   display:flex;
   align-items:center;
@@ -123,7 +113,6 @@ header{text-align:center;padding:40px}
   box-shadow:0 0 20px #a855f7;
 }
 
-/* DISCORD */
 .discord{
   position:fixed;
   bottom:20px;
@@ -143,7 +132,6 @@ header{text-align:center;padding:40px}
   box-shadow:0 0 20px #5865F2;
 }
 
-/* CUERVO */
 #cuervo{
   position:fixed;
   top:20%;
@@ -157,13 +145,11 @@ header{text-align:center;padding:40px}
   100%{left:110%}
 }
 
-/* FOOTER */
 .footer{
   text-align:center;
   opacity:0.5;
   font-size:12px;
   margin:40px 0 20px;
-  letter-spacing:1px;
 }
 </style>
 </head>
@@ -177,21 +163,21 @@ header{text-align:center;padding:40px}
   <div class="subtitle">HORARIOS DE PUBLICACIÓN</div>
 </header>
 
-
-<!-- INICIO -->
 <div class="container" id="inicio">
 
-<div class="card" onclick="mostrarDia('lunes')"><img src="reyhongo.png"><div class="preview"></div><h3>LUNES</h3></div>
+<div class="card" onclick="mostrarDia('lunes')"><img src="reyhongo.png"><h3>LUNES</h3></div>
 <div class="card" onclick="mostrarDia('martes')"><img src="proximamente.png"><div class="preview">Próximamente</div><h3>MARTES</h3></div>
-<div class="card" onclick="mostrarDia('miercoles')"><img src="pequenomundo.png"><div class="preview"></div><h3>MIÉRCOLES</h3></div>
-<div class="card" onclick="mostrarDia('jueves')"><img src="proximamente.png"><div class="preview">Próximamente</div><h3>JUEVES</h3></div>
+<div class="card" onclick="mostrarDia('miercoles')"><img src="pequenomundo.png"><h3>MIÉRCOLES</h3></div>
+
+<!-- JUEVES MODIFICADO -->
+<div class="card" onclick="mostrarDia('jueves')"><img src="desierto.png"><h3>JUEVES</h3></div>
+
 <div class="card" onclick="mostrarDia('viernes')"><img src="proximamente.png"><div class="preview">Próximamente</div><h3>VIERNES</h3></div>
 <div class="card" onclick="mostrarDia('sabado')"><img src="proximamente.png"><div class="preview">Próximamente</div><h3>SÁBADO</h3></div>
-<div class="card" onclick="mostrarDia('domingo')"><img src="margrave.png"><div class="preview"></div><h3>DOMINGO</h3></div>
+<div class="card" onclick="mostrarDia('domingo')"><img src="margrave.png"><h3>DOMINGO</h3></div>
 
 </div>
 
-<!-- VISTA DIA -->
 <div id="vista-dia">
   <button class="volver" onclick="volver()">
     <img src="volver.png" width="18"> Volver
@@ -205,7 +191,6 @@ header{text-align:center;padding:40px}
   <img src="discord.gif" width="20"> Discord
 </a>
 
-<!-- FOOTER -->
 <footer class="footer">
   Los horarios pueden variar sin previo aviso. <br>
   <span style="opacity:0.7;">RipScan ©</span>
@@ -216,7 +201,16 @@ const data={
   lunes:[{nombre:"El ascenso del Rey Hongo",img:"reyhongo.png",link:"https://manhwaweb.com/manhwa/el-ascenso-del-rey-hongo_1776286372224"}],
   martes:[],
   miercoles:[{nombre:"Un pequeño mundo lleno de diversion",img:"pequenomundo.png",link:"https://manhwaweb.com/manhwa/un-pequeo-mundo-lleno-de-diversion_1776474759366"}],
-  jueves:[],
+
+  // JUEVES AGREGADO
+  jueves:[
+    {
+      nombre:"El mago de arena del desierto abrasador",
+      img:"desierto.png",
+      link:"#"
+    }
+  ],
+
   viernes:[],
   sabado:[],
   domingo:[{nombre:"El mago sin valor del Margrave",img:"margrave.png",link:"https://manhwaweb.com/manhwa/el-mago-sin-valor-del-margrave_1776633397302"}]
@@ -250,8 +244,6 @@ function volver(){
   document.getElementById("vista-dia").classList.remove("active");
 }
 
-
-/* HOY AUTOMATICO */
 const diasSemana = ["domingo","lunes","martes","miercoles","jueves","viernes","sabado"];
 const hoy = diasSemana[new Date().getDay()];
 
@@ -275,7 +267,6 @@ document.querySelectorAll(".card").forEach(card => {
   }
 });
 
-/* PARTICULAS */
 const canvas=document.getElementById("particles");
 const ctx=canvas.getContext("2d");
 
