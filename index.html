@@ -19,7 +19,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background-color: var(--bg-deep); color: var(--text-main); font-family: 'Inter', sans-serif; line-height: 1.6; }
 
-        /* Header PC */
+/* Header PC */
         header { 
             padding: 20px 6%; 
             background: var(--bg-deep); 
@@ -36,11 +36,15 @@
         .logo-icon { font-size: 2rem; color: var(--accent-primary); } 
         .logo-text { font-weight: 800; font-size: 1.5rem; color: var(--accent-primary); letter-spacing: 1px; }
 
-        .nav-menu { display: flex; gap: 30px; }
-        .nav-menu a { color: var(--text-main); text-decoration: none; font-weight: 600; }
-        .nav-menu a:hover { color: var(--accent-primary); }
+        /* --- AQUÍ VA TU NUEVA CLASE --- */
+        .logo-img {
+            height: 40px;      /* Cambia este valor para ajustar el tamaño */
+            width: auto;       /* Mantiene la proporción original */
+            display: block;    /* Mejora la alineación */
+        }
 
-        #search { background: #1a1a1a; border: 1px solid #333; color: white; padding: 10px 20px; border-radius: 25px; width: 250px; }
+        .nav-menu { display: flex; gap: 30px; }
+        /* ... el resto de tu código sigue igual ... */
 
         /* Menú Hamburguesa (oculto en PC) */
         .menu-btn { display: none; font-size: 1.5rem; cursor: pointer; color: white; }
