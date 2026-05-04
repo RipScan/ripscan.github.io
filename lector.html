@@ -116,6 +116,17 @@
             document.getElementById('btnPrev').style.display = "none";
         }
 
+        // --- AUTOMATIZACIÓN DE CAPÍTULO VISTO ---
+        // Se ejecuta al cargar la página
+        window.addEventListener('load', () => {
+            let readChapters = JSON.parse(localStorage.getItem(`read_${id}`) || '[]');
+            if (!readChapters.includes(cap)) {
+                readChapters.push(cap);
+                localStorage.setItem(`read_${id}`, JSON.stringify(readChapters));
+                console.log("Capítulo marcado como leído");
+            }
+        });
+
         // 3. Sistema de carga en 3 pasos (Créditos -> Páginas -> Créditos)
         function loadSingleImage(filename, callback) {
             const img = new Image();
