@@ -20,11 +20,13 @@
         body { background-color: var(--bg-deep); color: var(--text-main); font-family: 'Inter', sans-serif; line-height: 1.6; }
 
         /* Header */
-        header { padding: 20px 6%; background: rgba(18, 18, 18, 0.95); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 1000; }
+        header { padding: 15px 6%; background: rgba(18, 18, 18, 0.95); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 1000; }
+        .nav-left { display: flex; align-items: center; gap: 30px; }
         .logo-text { font-weight: 800; font-size: 1.5rem; color: var(--accent-primary); cursor: pointer; }
-        .nav-menu { display: flex; gap: 30px; }
+        .nav-menu { display: flex; gap: 20px; }
         .nav-menu a { color: var(--text-main); text-decoration: none; font-weight: 600; }
         .nav-menu a:hover { color: var(--accent-primary); }
+        #search { background: #1a1a1a; border: 1px solid #333; color: white; padding: 8px 15px; border-radius: 20px; width: 200px; }
         
         .container { padding: 40px 6%; max-width: 900px; margin: auto; }
         .manga-header { display: flex; gap: 30px; margin-bottom: 40px; background: var(--bg-surface); padding: 20px; border-radius: 12px; border: 1px solid #222; }
@@ -51,11 +53,14 @@
 <body>
 
     <header>
-        <div class="logo-text" onclick="location.href='index.html'">RIPSCAN</div>
-        <nav class="nav-menu">
-            <a href="index.html">Inicio</a>
-            <a href="mis-manhwas.html">Mis Manhwas</a>
-        </nav>
+        <div class="nav-left">
+            <div class="logo-text" onclick="location.href='index.html'">RIPSCAN</div>
+            <nav class="nav-menu">
+                <a href="index.html">Inicio</a>
+                <a href="mis-manhwas.html">Mis Manhwas</a>
+            </nav>
+        </div>
+        <input type="text" id="search" placeholder="Buscar..." onkeyup="handleSearch(event)">
     </header>
 
     <div class="container">
@@ -71,17 +76,30 @@
             </div>
         </div>
 
-        <h2>Lista de Capítulos</h2>
+        <h2>Lista de Capítulos 
+            <i class="fa-solid fa-sort" onclick="toggleSort()" style="cursor:pointer; font-size: 1rem; color: var(--accent-primary); margin-left: 10px;"></i>
+        </h2>
         <br>
         <div id="listaCaps" class="chapter-list"></div>
     </div>
 
     <script>
         const id = new URLSearchParams(window.location.search).get('manga');
+        let mangaData = null;
+        let sortOrder = 'desc'; 
+
+        function handleSearch(e) {
+            if(e.key === 'Enter') window.location.href = `index.html?search=${e.target.value}`;
+        }
+
+        function toggleSort() {
+            sortOrder = (sortOrder === 'desc') ? 'asc' : 'desc';
+            renderChapters();
+        }
 
         function toggleRead(event, mangaId, cap, element) {
-            event.preventDefault(); // Evita que abra el enlace
-            event.stopPropagation(); // Evita que se dispare el evento del padre
+            event.preventDefault();
+            event.stopPropagation();
             
             let read = JSON.parse(localStorage.getItem(`read_${mangaId}`) || '[]');
             if (read.includes(cap)) {
@@ -96,26 +114,21 @@
             localStorage.setItem(`read_${mangaId}`, JSON.stringify(read));
         }
 
-        fetch('mangas.json').then(r => r.json()).then(data => {
-            const m = data.find(x => x.id === id);
-            if (!m) return;
-            
-            document.getElementById('mangaImg').src = m.imagen;
-            document.getElementById('mangaTitle').innerText = m.titulo;
-            document.getElementById('mangaStatus').innerText = "Estado: " + m.estado.toUpperCase();
-            document.getElementById('sinopsis').innerText = m.sinopsis;
-            document.getElementById('btnPrimero').href = `lector.html?manga=${id}&cap=1`;
-            document.getElementById('btnUltimo').href = `lector.html?manga=${id}&cap=${m.totalCaps}`;
-            document.getElementById('mangaGenres').innerHTML = m.generos.map(g => `<span class="badge">${g}</span>`).join('');
-
+        function renderChapters() {
+            if (!mangaData) return;
             const list = document.getElementById('listaCaps');
             const readCaps = JSON.parse(localStorage.getItem(`read_${id}`) || '[]');
+            list.innerHTML = '';
 
-            for(let i=m.totalCaps; i>=1; i--) {
+            const start = (sortOrder === 'desc') ? mangaData.totalCaps : 1;
+            const end = (sortOrder === 'desc') ? 1 : mangaData.totalCaps;
+            const step = (sortOrder === 'desc') ? -1 : 1;
+
+            for(let i = start; (sortOrder === 'desc' ? i >= end : i <= end); i += step) {
                 const isRead = readCaps.includes(i);
                 list.innerHTML += `
                     <a href="lector.html?manga=${id}&cap=${i}" class="cap-btn">
-                        <img src="${m.imagen}" class="cap-thumb">
+                        <img src="${mangaData.imagen}" class="cap-thumb">
                         <div class="cap-info">
                             <h4>Capítulo ${i}</h4>
                             <div class="cap-meta">
@@ -129,6 +142,21 @@
                     </a>
                 `;
             }
+        }
+
+        fetch('mangas.json').then(r => r.json()).then(data => {
+            mangaData = data.find(x => x.id === id);
+            if (!mangaData) return;
+            
+            document.getElementById('mangaImg').src = mangaData.imagen;
+            document.getElementById('mangaTitle').innerText = mangaData.titulo;
+            document.getElementById('mangaStatus').innerText = "Estado: " + mangaData.estado.toUpperCase();
+            document.getElementById('sinopsis').innerText = mangaData.sinopsis;
+            document.getElementById('btnPrimero').href = `lector.html?manga=${id}&cap=1`;
+            document.getElementById('btnUltimo').href = `lector.html?manga=${id}&cap=${mangaData.totalCaps}`;
+            document.getElementById('mangaGenres').innerHTML = mangaData.generos.map(g => `<span class="badge">${g}</span>`).join('');
+
+            renderChapters(); 
         });
     </script>
 </body>
