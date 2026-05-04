@@ -3,61 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RipScan | Información</title>
+    <title>RipScan | Info</title>
     <style>
         :root { --bg: #050505; --accent: #00d4ff; --card: #121212; }
         body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; }
-        
         header { padding: 25px 5%; background: rgba(5,5,5,0.95); backdrop-filter: blur(15px); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1a1a1a; position: sticky; top: 0; z-index: 1000; }
         .logo { font-size: 1.8rem; font-weight: 900; color: var(--accent); cursor: pointer; }
         .nav-menu { display: flex; gap: 30px; }
         .nav-menu a { color: #fff; text-decoration: none; font-size: 1rem; transition: 0.3s; }
         .nav-menu a:hover { color: var(--accent); }
-        #search { background: #111; border: 1px solid #333; color: white; padding: 10px 20px; border-radius: 25px; width: 200px; }
-
         .container { padding: 40px 5%; max-width: 800px; margin: auto; }
         .manga-header { display: flex; gap: 30px; margin-bottom: 40px; }
         .manga-header img { width: 200px; border-radius: 12px; }
+        .btn-action { background: #1a1a1a; padding: 10px 20px; border-radius: 6px; text-decoration: none; color: white; border: 1px solid #333; margin-right: 10px; }
+        .btn-fav { background: #333; color: white; padding: 10px 20px; border-radius: 6px; border: none; cursor: pointer; }
+        .btn-fav.active { background: var(--accent); color: black; font-weight: bold; }
         .cap-btn { background: var(--card); padding: 15px; border-radius: 8px; text-decoration: none; color: white; border: 1px solid #1a1a1a; display: flex; justify-content: space-between; margin-bottom: 10px; }
-        .cap-btn:hover { border-color: var(--accent); }
     </style>
 </head>
 <body>
-
     <header>
         <div class="logo" onclick="location.href='index.html'">RIPSCAN</div>
         <nav class="nav-menu">
             <a href="index.html">Inicio</a>
-            <a href="#" onclick="alert('Funcionalidad en desarrollo')">Mis Manhwas</a>
+            <a href="mis-manhwas.html">Mis Manhwas</a>
         </nav>
-        <input type="text" id="search" placeholder="🔍 Buscar..." onkeyup="handleSearch(event)">
     </header>
-
     <div class="container">
         <div class="manga-header">
-            <img id="mangaImg" src="" alt="Portada">
+            <img id="mangaImg" src="">
             <div>
                 <h1 id="mangaTitle" style="color:var(--accent);">Cargando...</h1>
+                <div style="margin: 20px 0;">
+                    <a id="btnPrimero" class="btn-action">Primer Cap</a>
+                    <a id="btnUltimo" class="btn-action">Último Cap</a>
+                    <button id="btnFav" class="btn-fav" onclick="toggleFav()">❤️ Favoritos</button>
+                </div>
                 <p id="sinopsis" style="color:#ccc; line-height:1.6;"></p>
             </div>
         </div>
         <h2>Capítulos</h2>
         <div id="listaCaps"></div>
     </div>
-
     <script>
         const id = new URLSearchParams(window.location.search).get('manga');
+        function toggleFav() {
+            let favs = JSON.parse(localStorage.getItem('favs') || '[]');
+            if (favs.includes(id)) { favs = favs.filter(i => i !== id); document.getElementById('btnFav').classList.remove('active'); }
+            else { favs.push(id); document.getElementById('btnFav').classList.add('active'); }
+            localStorage.setItem('favs', JSON.stringify(favs));
+        }
         fetch('mangas.json').then(r => r.json()).then(data => {
             const m = data.find(x => x.id === id);
             document.getElementById('mangaImg').src = m.imagen;
             document.getElementById('mangaTitle').innerText = m.titulo;
             document.getElementById('sinopsis').innerText = m.sinopsis;
+            document.getElementById('btnPrimero').href = `lector.html?manga=${id}&cap=1`;
+            document.getElementById('btnUltimo').href = `lector.html?manga=${id}&cap=${m.totalCaps}`;
+            if (JSON.parse(localStorage.getItem('favs') || '[]').includes(id)) document.getElementById('btnFav').classList.add('active');
             const list = document.getElementById('listaCaps');
-            for(let i=1; i<=m.totalCaps; i++) {
-                list.innerHTML += `<a href="lector.html?manga=${id}&cap=${i}" class="cap-btn"><span>Capítulo ${i}</span><span>Leer →</span></a>`;
-            }
+            for(let i=1; i<=m.totalCaps; i++) list.innerHTML += `<a href="lector.html?manga=${id}&cap=${i}" class="cap-btn"><span>Capítulo ${i}</span><span>Leer →</span></a>`;
         });
-        function handleSearch(e) { if(e.key === 'Enter') window.location.href = `index.html?search=${e.target.value}`; }
     </script>
 </body>
 </html>
