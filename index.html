@@ -20,8 +20,9 @@
 
         /* Header */
         header { padding: 20px 6%; background: rgba(18, 18, 18, 0.95); backdrop-filter: blur(20px); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 1000; }
-        .logo-container { cursor: pointer; display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.2rem; }
-        .logo-icon { font-size: 1.8rem; color: var(--accent-primary); }
+        
+        .logo-container { cursor: pointer; display: flex; align-items: center; gap: 10px; }
+        .logo-icon { font-size: 2rem; color: var(--accent-primary); } /* AQUÍ ESTÁ EL ICONO */
 
         .nav-menu { display: flex; gap: 30px; }
         .nav-menu a { color: var(--text-main); text-decoration: none; font-weight: 600; }
@@ -31,54 +32,28 @@
 
         /* Contenido */
         .container { padding: 40px 6%; }
-        h2 { font-size: 1.5rem; margin-bottom: 25px; color: var(--text-main); }
+        h2 { font-size: 1.5rem; margin-bottom: 25px; color: var(--accent-primary); }
 
-        /* Biblioteca Grid */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 25px; margin-bottom: 60px; }
         .card { background: var(--bg-surface); border-radius: 12px; padding: 10px; border: 1px solid #222; text-decoration: none; color: white; transition: 0.3s; }
         .card:hover { transform: translateY(-5px); border-color: var(--accent-primary); }
         .card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 8px; }
-        .card h3 { font-size: 0.9rem; margin-top: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .card h3 { font-size: 0.9rem; margin-top: 10px; }
 
-        /* 3 MANHWAS POR LÍNEA */
-        .updates-container { 
-            display: grid; 
-            grid-template-columns: repeat(3, 1fr); /* Aquí forzamos las 3 columnas */
-            gap: 20px; 
-        }
-        
-        /* Ajuste para móviles (se vuelve 1 columna) */
-        @media (max-width: 900px) { .updates-container { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 600px) { .updates-container { grid-template-columns: 1fr; } }
-
-        .update-card { 
-            background: #0d0d0d; 
-            padding: 15px; 
-            border-radius: 12px; 
-            border: 1px solid #222; 
-            display: flex;
-            flex-direction: column; /* Apila imagen, título y capítulos */
-            gap: 10px;
-        }
-        
-        .update-thumb { width: 100%; height: 250px; object-fit: cover; border-radius: 8px; cursor: pointer; }
-        
-        .update-info h3 { font-size: 1.1rem; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-        .chapter-list { display: flex; flex-direction: column; gap: 4px; }
-        .chapter-row { display: flex; justify-content: space-between; align-items: center; }
-        .chapter-link { color: var(--text-main); text-decoration: none; font-size: 0.9rem; }
+        /* Actualizaciones */
+        .updates-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; }
+        .update-card { display: flex; gap: 15px; background: #0d0d0d; padding: 15px; border-radius: 12px; border: 1px solid #222; }
+        .update-thumb { width: 80px; height: 110px; object-fit: cover; border-radius: 6px; cursor: pointer; }
+        .chapter-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #222; }
+        .chapter-link { color: var(--accent-primary); text-decoration: none; font-size: 0.9rem; }
         .chapter-time { color: var(--text-muted); font-size: 0.8rem; }
-        .lock-icon { color: #fbbf24; margin-left: 5px; font-size: 0.7rem; }
     </style>
 </head>
 <body>
 
     <header>
         <div class="logo-container" onclick="location.href='index.html'">
-            <i class="fa-solid fa-skull logo-icon"></i>
-            <span>RIPSCAN</span>
-        </div>
+            <i class="fa-solid fa-skull logo-icon"></i> </div>
         <nav class="nav-menu">
             <a href="index.html">Inicio</a>
             <a href="mis-manhwas.html">Mis Manhwas</a>
@@ -90,7 +65,7 @@
         <h2>Biblioteca</h2>
         <div class="grid" id="mangaGrid"></div>
 
-        <h2>Latest Updates</h2>
+        <h2>Últimas Actualizaciones</h2>
         <div class="updates-container" id="latestUpdates"></div>
     </div>
 
@@ -103,10 +78,10 @@
             const hours = Math.floor(mins / 60);
             const days = Math.floor(hours / 24);
             if (mins < 1) return "Recién";
-            if (mins < 60) return `${mins}m`;
-            if (hours < 24) return `${hours}h`;
-            if (days < 7) return `${days}d`;
-            return `${Math.floor(days/7)}s`;
+            if (mins < 60) return `Hace ${mins}m`;
+            if (hours < 24) return `Hace ${hours}h`;
+            if (days < 7) return `Hace ${days}d`;
+            return `Hace ${Math.floor(days/7)}s`;
         }
 
         function handleSearch(e) {
@@ -131,21 +106,17 @@
             const conUpdates = data.filter(m => m.ultimosCaps && m.ultimosCaps.length > 0)
                                    .sort((a,b) => new Date(b.ultimosCaps[0].fecha) - new Date(a.ultimosCaps[0].fecha));
 
-            document.getElementById('latestUpdates').innerHTML = conUpdates.slice(0, 6).map(m => `
+            document.getElementById('latestUpdates').innerHTML = conUpdates.slice(0, 4).map(m => `
                 <div class="update-card">
                     <img src="${m.imagen}" class="update-thumb" onclick="location.href='info.html?manga=${m.id}'">
-                    <div class="update-info">
-                        <h3>${m.titulo}</h3>
-                        <div class="chapter-list">
-                            ${m.ultimosCaps.map(c => `
-                                <div class="chapter-row">
-                                    <a href="lector.html?manga=${m.id}&cap=${c.numero}" class="chapter-link">
-                                        Capítulo ${c.numero} ${c.bloqueado ? '<i class="fa-solid fa-lock lock-icon"></i>' : ''}
-                                    </a>
-                                    <span class="chapter-time">${formatTimeAgo(c.fecha)}</span>
-                                </div>
-                            `).join('')}
-                        </div>
+                    <div style="flex-grow:1;">
+                        <h3 style="margin-bottom:10px;">${m.titulo}</h3>
+                        ${m.ultimosCaps.map(c => `
+                            <div class="chapter-row">
+                                <a href="lector.html?manga=${m.id}&cap=${c.numero}" class="chapter-link">Capítulo ${c.numero}</a>
+                                <span class="chapter-time">${formatTimeAgo(c.fecha)}</span>
+                            </div>
+                        `).join('')}
                     </div>
                 </div>
             `).join('');
