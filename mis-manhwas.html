@@ -19,7 +19,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background-color: var(--bg-deep); color: var(--text-main); font-family: 'Inter', sans-serif; line-height: 1.6; }
 
-        /* Header consistente */
+        /* Header */
         header { padding: 15px 6%; background: rgba(18, 18, 18, 0.95); display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 1000; }
         .header-left { flex: 1; display: flex; justify-content: flex-start; }
         .header-center { flex: 1; display: flex; justify-content: center; }
@@ -34,11 +34,14 @@
         .container { padding: 40px 6%; max-width: 900px; margin: auto; }
         
         /* Grid de Manhwas */
-        .manga-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 20px; margin-top: 20px; }
-        .manga-card { background: var(--bg-surface); border-radius: 8px; overflow: hidden; border: 1px solid #222; text-decoration: none; color: white; transition: 0.3s; }
+        .manga-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; margin-top: 20px; }
+        .manga-card { background: var(--bg-surface); border-radius: 8px; overflow: hidden; border: 1px solid #222; text-decoration: none; color: white; transition: 0.3s; display: block; }
         .manga-card:hover { border-color: var(--accent-primary); transform: translateY(-5px); }
         .manga-card img { width: 100%; height: 220px; object-fit: cover; }
-        .manga-card h3 { font-size: 0.9rem; padding: 10px; }
+        .manga-card h3 { font-size: 0.9rem; padding: 10px 10px 5px 10px; }
+        
+        /* Etiqueta de último leído */
+        .last-read-tag { font-size: 0.75rem; color: var(--text-muted); padding: 0 10px 10px 10px; font-weight: 500; }
     </style>
 </head>
 <body>
@@ -69,22 +72,27 @@
             if(e.key === 'Enter') window.location.href = `index.html?search=${e.target.value}`;
         }
 
-        // Cargar favoritos
         const favs = JSON.parse(localStorage.getItem('favorites') || '[]');
         const favList = document.getElementById('favList');
 
         fetch('mangas.json').then(r => r.json()).then(data => {
-            // Filtramos los mangas que coinciden con los IDs en el localStorage
             const myFavs = data.filter(m => favs.includes(m.id));
 
             if (myFavs.length === 0) {
                 favList.innerHTML = '<p style="color: var(--text-muted)">Aún no has agregado favoritos.</p>';
             } else {
                 myFavs.forEach(m => {
+                    // Obtenemos los capítulos leídos de este manga específico
+                    const readData = JSON.parse(localStorage.getItem(`read_${m.id}`) || '[]');
+                    // Calculamos el mayor número (el último leído)
+                    const lastRead = readData.length > 0 ? Math.max(...readData) : 0;
+                    const label = lastRead > 0 ? `Visto: Cap ${lastRead}` : "No leído";
+
                     favList.innerHTML += `
                         <a href="info.html?manga=${m.id}" class="manga-card">
                             <img src="${m.imagen}" alt="${m.titulo}">
                             <h3>${m.titulo}</h3>
+                            <div class="last-read-tag">${label}</div>
                         </a>
                     `;
                 });
