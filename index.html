@@ -18,7 +18,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background-color: var(--bg-deep); color: var(--text-main); font-family: 'Inter', sans-serif; line-height: 1.6; }
 
-        /* Header (Color fondo igual al body) */
+        /* Header modificado a negro sólido */
         header { 
             padding: 20px 6%; 
             background: var(--bg-deep); 
@@ -39,31 +39,28 @@
         .nav-menu a { color: var(--text-main); text-decoration: none; font-weight: 600; }
         .nav-menu a:hover { color: var(--accent-primary); }
 
-        #search { background: #1a1a1a; border: 1px solid #333; color: white; padding: 10px 20px; border-radius: 25px; width: 200px; }
+        #search { background: #1a1a1a; border: 1px solid #333; color: white; padding: 10px 20px; border-radius: 25px; width: 250px; }
 
         /* Contenido */
         .container { padding: 40px 6%; }
         h2 { font-size: 1.5rem; margin-bottom: 25px; color: var(--text-main); }
 
-        /* Grid Biblioteca (3 en celu, 4 tablet, 6 PC) */
-        .grid { 
-            display: grid; 
-            grid-template-columns: repeat(3, 1fr); 
-            gap: 8px; 
-            margin-bottom: 60px; 
+        /* Grid: PC se mantiene igual. Mobile se fuerza a 3 columnas */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 25px; margin-bottom: 60px; }
+        
+        /* Ajuste exclusivo para móviles (3 columnas) */
+        @media (max-width: 600px) {
+            .grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+            .card h3 { font-size: 0.7rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         }
-        @media (min-width: 768px) { .grid { grid-template-columns: repeat(4, 1fr); gap: 15px; } }
-        @media (min-width: 1024px) { .grid { grid-template-columns: repeat(6, 1fr); gap: 20px; } }
 
-        .card { background: var(--bg-surface); border-radius: 8px; padding: 8px; border: 1px solid #222; text-decoration: none; color: white; transition: 0.3s; }
+        .card { background: var(--bg-surface); border-radius: 12px; padding: 10px; border: 1px solid #222; text-decoration: none; color: white; transition: 0.3s; }
         .card:hover { transform: translateY(-5px); border-color: var(--accent-primary); }
-        .card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 4px; }
-        .card h3 { font-size: 0.75rem; margin-top: 8px; color: var(--text-main); text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 8px; }
+        .card h3 { font-size: 0.9rem; margin-top: 10px; color: var(--text-main); }
 
         /* Actualizaciones */
-        .updates-container { display: grid; grid-template-columns: 1fr; gap: 20px; }
-        @media (min-width: 768px) { .updates-container { grid-template-columns: repeat(2, 1fr); } }
-
+        .updates-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; }
         .update-card { display: flex; gap: 15px; background: #0d0d0d; padding: 15px; border-radius: 12px; border: 1px solid #222; }
         .update-thumb { width: 80px; height: 110px; object-fit: cover; border-radius: 6px; cursor: pointer; }
         
@@ -136,7 +133,7 @@
                 <div class="update-card">
                     <img src="${m.imagen}" class="update-thumb" onclick="location.href='info.html?manga=${m.id}'">
                     <div style="flex-grow:1;">
-                        <h3 style="margin-bottom:10px; color:white; font-size: 1rem;">${m.titulo}</h3>
+                        <h3 style="margin-bottom:10px; color:white;">${m.titulo}</h3>
                         ${m.ultimosCaps.map(c => `
                             <div class="chapter-row">
                                 <a href="lector.html?manga=${m.id}&cap=${c.numero}" class="chapter-link">Capítulo ${c.numero}</a>
