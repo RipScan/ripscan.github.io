@@ -84,23 +84,19 @@
     <div id="container" style="padding-top:20px;"></div>
 
     <script>
-        // Lógica de Scroll mejorada
+        // 1. Lógica de Scroll mejorada
         let lastScrollTop = 0;
         const header = document.querySelector('header');
         const readerNav = document.querySelector('.reader-nav');
 
         window.addEventListener('scroll', function() {
             let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            
-            // Si bajamos más de 100px, escondemos ambos
             if (scrollTop > lastScrollTop && scrollTop > 100) {
                 header.style.transform = 'translateY(-100%)';
                 readerNav.style.transform = 'translateY(-100%)';
                 header.style.opacity = '0';
                 readerNav.style.opacity = '0';
-            } 
-            // Si subimos, los volvemos a mostrar
-            else {
+            } else {
                 header.style.transform = 'translateY(0)';
                 readerNav.style.transform = 'translateY(0)';
                 header.style.opacity = '1';
@@ -109,7 +105,7 @@
             lastScrollTop = scrollTop;
         });
 
-        // Tus funciones anteriores
+        // 2. Configuración de parámetros
         const p = new URLSearchParams(window.location.search);
         const id = p.get('manga'), cap = parseInt(p.get('cap'));
         document.getElementById('btnInfo').href = `info.html?manga=${id}`;
@@ -120,19 +116,40 @@
             document.getElementById('btnPrev').style.display = "none";
         }
 
-        let page = 1;
-        function load() {
+        // 3. Sistema de carga en 3 pasos (Créditos -> Páginas -> Créditos)
+        function loadSingleImage(filename, callback) {
             const img = new Image();
-            img.src = `mangas/${id}/cap-${cap}/${String(page).padStart(3, '0')}.png`;
+            img.src = `mangas/${id}/cap-${cap}/${filename}`;
             img.className = "lector-img";
-            img.onerror = () => { if(page > 1) console.log("Fin"); };
             img.onload = () => { 
                 document.getElementById('container').appendChild(img); 
-                page++; 
-                load(); 
+                if(callback) callback(); 
+            };
+            img.onerror = () => { if(callback) callback(); }; // Si no existe, sigue igual
+        }
+
+        function loadNumberedPages(pageNumber) {
+            const img = new Image();
+            img.src = `mangas/${id}/cap-${cap}/${String(pageNumber).padStart(3, '0')}.png`;
+            img.className = "lector-img";
+            img.onload = () => { 
+                document.getElementById('container').appendChild(img); 
+                loadNumberedPages(pageNumber + 1); // Siguiente página
+            };
+            img.onerror = () => { 
+                // Al terminar las páginas numeradas, cargamos el crédito final
+                loadSingleImage('999_creditos.png');
             };
         }
-        load();
+
+        // Inicio: Cargar créditos iniciales -> luego páginas numeradas
+        loadSingleImage('000_creditos.png', () => {
+            loadNumberedPages(1);
+        });
+
+        function handleSearch(e) { 
+            if(e.key === 'Enter') window.location.href = `index.html?search=${e.target.value}`; 
+        }
     </script>
 </body>
 </html>
