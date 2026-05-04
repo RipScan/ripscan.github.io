@@ -8,48 +8,35 @@
         :root { --bg: #050505; --accent: #00d4ff; --card: #121212; }
         body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; }
         
-        /* Header Mejorado */
+        /* Header Profesional */
         header { 
-            padding: 15px 5%; background: rgba(5,5,5,0.8); backdrop-filter: blur(20px); 
-            position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid #1a1a1a; 
+            padding: 25px 5%; background: rgba(5,5,5,0.95); backdrop-filter: blur(15px); 
             display: flex; justify-content: space-between; align-items: center; 
+            border-bottom: 1px solid #1a1a1a; position: sticky; top: 0; z-index: 1000;
         }
-        
-        .logo { font-size: 1.4rem; font-weight: 800; color: var(--accent); cursor: pointer; letter-spacing: -1px; }
-        
-        /* Nueva navegación */
-        .nav-menu { display: flex; gap: 20px; }
-        .nav-menu a { color: #aaa; text-decoration: none; font-size: 0.9rem; transition: 0.3s; }
+        .logo { font-size: 1.8rem; font-weight: 900; color: var(--accent); cursor: pointer; letter-spacing: -1px; }
+        .nav-menu { display: flex; gap: 30px; }
+        .nav-menu a { color: #fff; text-decoration: none; font-size: 1rem; font-weight: 500; transition: 0.3s; }
         .nav-menu a:hover { color: var(--accent); }
-        
-        /* Buscador */
-        #search { background: #1a1a1a; border: 1px solid #333; color: white; padding: 8px 15px; border-radius: 20px; width: 150px; outline: none; }
-        #search:focus { border-color: var(--accent); }
+        #search { background: #111; border: 1px solid #333; color: white; padding: 10px 20px; border-radius: 25px; width: 200px; font-size: 0.9rem; }
 
         /* Grid */
         .container { padding: 40px 5%; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 25px; }
-        
-        .card { 
-            background: var(--card); border-radius: 16px; padding: 12px; border: 1px solid #1a1a1a; 
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            text-decoration: none; color: white; display: block;
-        }
-        .card:hover { transform: translateY(-10px); border-color: var(--accent); box-shadow: 0 0 15px rgba(0,212,255,0.15); }
+        .card { background: var(--card); border-radius: 16px; padding: 12px; border: 1px solid #1a1a1a; transition: all 0.4s; text-decoration: none; color: white; display: block; }
+        .card:hover { transform: translateY(-10px); border-color: var(--accent); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
         .card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 10px; }
-        .card h3 { font-size: 0.95rem; margin: 12px 0 5px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .card h3 { font-size: 0.95rem; margin: 12px 0 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     </style>
 </head>
 <body>
 
     <header>
         <div class="logo" onclick="location.href='index.html'">RIPSCAN</div>
-        
         <nav class="nav-menu">
             <a href="index.html">Inicio</a>
-            <a href="#" onclick="alert('Esta sección es tu biblioteca actual')">Mis Manhwas</a>
+            <a href="#" onclick="alert('Funcionalidad en desarrollo')">Mis Manhwas</a>
         </nav>
-
         <input type="text" id="search" placeholder="🔍 Buscar..." onkeyup="filter()">
     </header>
 
@@ -66,8 +53,7 @@
         });
 
         function render(data) {
-            const grid = document.getElementById('mangaGrid');
-            grid.innerHTML = data.map(m => `
+            document.getElementById('mangaGrid').innerHTML = data.map(m => `
                 <a href="info.html?manga=${m.id}" class="card">
                     <img src="${m.imagen}" alt="${m.titulo}">
                     <h3>${m.titulo}</h3>
@@ -77,7 +63,7 @@
 
         function filter() {
             const val = document.getElementById('search').value.toLowerCase();
-            render(mangaData.filter(m => m.titulo.toLowerCase().includes(m.titulo.toLowerCase().includes(val))));
+            render(mangaData.filter(m => m.titulo.toLowerCase().includes(val)));
         }
     </script>
 </body>
