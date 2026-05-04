@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mis Manhwas | RipScan</title>
+    <title>RipScan | Mis Manhwas</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -19,110 +19,76 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background-color: var(--bg-deep); color: var(--text-main); font-family: 'Inter', sans-serif; line-height: 1.6; }
 
-        header { padding: 20px 6%; background: rgba(18, 18, 18, 0.95); backdrop-filter: blur(20px); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 1000; }
-        .logo-container { cursor: pointer; display: flex; align-items: center; gap: 10px; }
-        .logo-text { font-weight: 800; font-size: 1.5rem; color: var(--accent-primary); letter-spacing: 1px; }
+        /* Header consistente */
+        header { padding: 15px 6%; background: rgba(18, 18, 18, 0.95); display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 1000; }
+        .header-left { flex: 1; display: flex; justify-content: flex-start; }
+        .header-center { flex: 1; display: flex; justify-content: center; }
+        .header-right { flex: 1; display: flex; justify-content: flex-end; }
 
+        .logo-text { font-weight: 800; font-size: 1.5rem; color: var(--accent-primary); cursor: pointer; }
         .nav-menu { display: flex; gap: 30px; }
         .nav-menu a { color: var(--text-main); text-decoration: none; font-weight: 600; }
         .nav-menu a:hover { color: var(--accent-primary); }
-
-        #search { background: #1a1a1a; border: 1px solid #333; color: white; padding: 10px 20px; border-radius: 25px; width: 250px; }
-        .menu-btn { display: none; font-size: 1.5rem; cursor: pointer; color: white; }
-        .mobile-nav { display: none; position: absolute; top: 100%; left: 0; width: 100%; background: #111; padding: 20px; border-bottom: 1px solid #333; flex-direction: column; gap: 15px; z-index: 999; }
-        .mobile-nav a { color: white; text-decoration: none; font-weight: 600; font-size: 1.2rem; }
-
-        .container { padding: 40px 6%; }
-        h2 { color: var(--text-main); margin-bottom: 25px; font-size: 1.5rem; }
-
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 25px; margin-bottom: 50px; }
-        .card { background: var(--bg-surface); border-radius: 12px; padding: 10px; border: 1px solid #222; text-decoration: none; color: white; transition: 0.3s; display: flex; flex-direction: column; }
-        .card:hover { transform: translateY(-5px); border-color: var(--accent-primary); }
-        .card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 8px; }
-        .card h3 { font-size: 0.9rem; margin-top: 10px; color: var(--text-main); }
-
-        .progress-container { width: 100%; background: #333; height: 6px; border-radius: 3px; margin-top: 10px; overflow: hidden; }
-        .progress-bar { height: 100%; background: var(--accent-primary); width: 0%; transition: width 0.5s; }
-
-        @media (max-width: 600px) {
-            header { position: relative; padding: 15px 4%; }
-            .nav-menu { display: none; }
-            .menu-btn { display: block; }
-            .logo-container { position: absolute; left: 50%; transform: translateX(-50%); }
-            #search { width: 100px; padding: 6px 12px; font-size: 0.8rem; }
-            .grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
-        }
+        #search { background: #1a1a1a; border: 1px solid #333; color: white; padding: 8px 15px; border-radius: 20px; width: 200px; }
+        
+        .container { padding: 40px 6%; max-width: 900px; margin: auto; }
+        
+        /* Grid de Manhwas */
+        .manga-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 20px; margin-top: 20px; }
+        .manga-card { background: var(--bg-surface); border-radius: 8px; overflow: hidden; border: 1px solid #222; text-decoration: none; color: white; transition: 0.3s; }
+        .manga-card:hover { border-color: var(--accent-primary); transform: translateY(-5px); }
+        .manga-card img { width: 100%; height: 220px; object-fit: cover; }
+        .manga-card h3 { font-size: 0.9rem; padding: 10px; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="menu-btn" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></div>
-        <div class="logo-container" onclick="location.href='index.html'">
-            <span class="logo-text">RIPSCAN</span>
+        <div class="header-left">
+            <div class="logo-text" onclick="location.href='index.html'">RIPSCAN</div>
         </div>
-        <nav class="nav-menu">
-            <a href="index.html">Inicio</a>
-            <a href="mis-manhwas.html" style="color: var(--accent-primary);">Mis Manhwas</a>
-        </nav>
-        <input type="text" id="search" placeholder="Buscar..." onkeyup="handleSearch(event)">
-        <div class="mobile-nav" id="mobileMenu">
-            <a href="index.html">Inicio</a>
-            <a href="mis-manhwas.html">Mis Manhwas</a>
+        <div class="header-center">
+            <nav class="nav-menu">
+                <a href="index.html">Inicio</a>
+                <a href="mis-manhwas.html" style="color: var(--accent-primary);">Mis Manhwas</a>
+            </nav>
+        </div>
+        <div class="header-right">
+            <input type="text" id="search" placeholder="Buscar..." onkeyup="handleSearch(event)">
         </div>
     </header>
 
     <div class="container">
-        <h2>Mis Favoritos</h2>
-        <div class="grid" id="favGrid"></div>
-
-        <h2>Historial Reciente</h2>
-        <div class="grid" id="historyGrid"></div>
+        <h1>Mis Favoritos</h1>
+        <div id="favList" class="manga-grid">
+            </div>
     </div>
 
     <script>
-        function toggleMenu() {
-            const menu = document.getElementById('mobileMenu');
-            menu.style.display = (menu.style.display === 'flex') ? 'none' : 'flex';
-        }
-
         function handleSearch(e) {
             if(e.key === 'Enter') window.location.href = `index.html?search=${e.target.value}`;
         }
 
-        // Función para renderizar tarjetas con barra de progreso
-        function renderCard(m) {
-            const readChapters = JSON.parse(localStorage.getItem(`read_${m.id}`) || '[]');
-            const progress = m.totalCaps > 0 ? Math.round((readChapters.length / m.totalCaps) * 100) : 0;
-            return `
-                <a href="info.html?manga=${m.id}" class="card">
-                    <img src="${m.imagen}">
-                    <h3>${m.titulo}</h3>
-                    <div class="progress-container">
-                        <div class="progress-bar" style="width: ${progress}%"></div>
-                    </div>
-                    <small style="color: var(--text-muted); font-size: 0.7rem; margin-top: 5px;">${progress}% leído</small>
-                </a>
-            `;
-        }
+        // Cargar favoritos
+        const favs = JSON.parse(localStorage.getItem('favorites') || '[]');
+        const favList = document.getElementById('favList');
 
         fetch('mangas.json').then(r => r.json()).then(data => {
-            const gridFav = document.getElementById('favGrid');
-            const gridHist = document.getElementById('historyGrid');
-            
-            // Cargar Favoritos
-            const favs = JSON.parse(localStorage.getItem('favs') || '[]');
-            const favList = data.filter(m => favs.includes(m.id));
-            gridFav.innerHTML = favList.length > 0 
-                ? favList.map(m => renderCard(m)).join('') 
-                : "<p style='color: var(--text-muted);'>No tienes favoritos todavía.</p>";
+            // Filtramos los mangas que coinciden con los IDs en el localStorage
+            const myFavs = data.filter(m => favs.includes(m.id));
 
-            // Cargar Historial
-            const historyIds = JSON.parse(localStorage.getItem('history') || '[]');
-            const historyList = historyIds.map(id => data.find(m => m.id === id)).filter(Boolean);
-            gridHist.innerHTML = historyList.length > 0 
-                ? historyList.map(m => renderCard(m)).join('') 
-                : "<p style='color: var(--text-muted);'>No has leído nada recientemente.</p>";
+            if (myFavs.length === 0) {
+                favList.innerHTML = '<p style="color: var(--text-muted)">Aún no has agregado favoritos.</p>';
+            } else {
+                myFavs.forEach(m => {
+                    favList.innerHTML += `
+                        <a href="info.html?manga=${m.id}" class="manga-card">
+                            <img src="${m.imagen}" alt="${m.titulo}">
+                            <h3>${m.titulo}</h3>
+                        </a>
+                    `;
+                });
+            }
         });
     </script>
 </body>
