@@ -2,33 +2,59 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Mis Manhwas | RipScan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Favoritos | RipScan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        :root { --bg: #050505; --accent: #00d4ff; --card: #121212; }
-        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; }
-        
-        header { padding: 25px 5%; background: rgba(5,5,5,0.95); backdrop-filter: blur(15px); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1a1a1a; }
-        .logo { font-size: 1.8rem; font-weight: 900; color: var(--accent); cursor: pointer; }
-        .nav-menu { display: flex; gap: 30px; }
-        .nav-menu a { color: #fff; text-decoration: none; font-size: 1rem; }
-        .nav-menu a:hover { color: var(--accent); }
-        #search { background: #111; border: 1px solid #333; color: white; padding: 10px 20px; border-radius: 25px; width: 200px; font-size: 0.9rem; }
+        :root {
+            --bg-deep: #050505;
+            --bg-surface: #121212;
+            --accent-primary: #a855f7;
+            --text-main: #ffffff;
+            --text-muted: #a1a1aa;
+        }
 
-        .container { padding: 40px 5%; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: var(--bg-deep); color: var(--text-main); font-family: 'Inter', sans-serif; line-height: 1.6; }
+
+        /* Header Consistente */
+        header { padding: 20px 6%; background: rgba(18, 18, 18, 0.95); backdrop-filter: blur(20px); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 1000; }
+        
+        .logo-container { cursor: pointer; display: flex; align-items: center; gap: 10px; }
+        .logo-icon { font-size: 1.8rem; color: var(--accent-primary); }
+        .logo-text { font-weight: 800; font-size: 1.5rem; color: var(--accent-primary); letter-spacing: 1px; }
+
+        .nav-menu { display: flex; gap: 30px; }
+        .nav-menu a { color: var(--text-main); text-decoration: none; font-weight: 600; }
+        .nav-menu a:hover { color: var(--accent-primary); }
+
+        #search { background: #1a1a1a; border: 1px solid #333; color: white; padding: 10px 20px; border-radius: 25px; width: 250px; }
+
+        /* Contenido */
+        .container { padding: 40px 6%; }
+        h2 { color: var(--text-main); margin-bottom: 25px; font-size: 1.5rem; }
+
+        /* Grid de Manhwas */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 25px; }
-        .card { background: var(--card); border-radius: 16px; padding: 12px; border: 1px solid #1a1a1a; transition: 0.4s; text-decoration: none; color: white; display: block; }
-        .card:hover { transform: translateY(-10px); border-color: var(--accent); }
-        .card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 10px; }
+        .card { background: var(--bg-surface); border-radius: 12px; padding: 10px; border: 1px solid #222; text-decoration: none; color: white; transition: 0.3s; }
+        .card:hover { transform: translateY(-5px); border-color: var(--accent-primary); }
+        .card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 8px; }
+        .card h3 { font-size: 0.9rem; margin-top: 10px; color: var(--text-main); }
     </style>
 </head>
 <body>
+
     <header>
-        <div class="logo" onclick="location.href='index.html'">RIPSCAN</div>
+        <div class="logo-container" onclick="location.href='index.html'">
+            <i class="fa-solid fa-skull logo-icon"></i>
+            <span class="logo-text">RIPSCAN</span>
+        </div>
         <nav class="nav-menu">
             <a href="index.html">Inicio</a>
-            <a href="mis-manhwas.html" style="color:var(--accent);">Mis Manhwas</a>
+            <a href="mis-manhwas.html" style="color: var(--accent-primary);">Mis Manhwas</a>
         </nav>
-        <input type="text" id="search" placeholder="🔍 Buscar..." onkeyup="handleSearch(event)">
+        <input type="text" id="search" placeholder="Buscar..." onkeyup="handleSearch(event)">
     </header>
 
     <div class="container">
@@ -45,9 +71,15 @@
             const favs = JSON.parse(localStorage.getItem('favs') || '[]');
             const filtered = data.filter(m => favs.includes(m.id));
             const grid = document.getElementById('mangaGrid');
+            
             grid.innerHTML = filtered.length > 0 ? 
-                filtered.map(m => `<a href="info.html?manga=${m.id}" class="card"><img src="${m.imagen}"><h3>${m.titulo}</h3></a>`).join('') :
-                "<p>No tienes favoritos todavía.</p>";
+                filtered.map(m => `
+                    <a href="info.html?manga=${m.id}" class="card">
+                        <img src="${m.imagen}">
+                        <h3>${m.titulo}</h3>
+                    </a>
+                `).join('') : 
+                "<p style='color: var(--text-muted);'>No tienes favoritos todavía.</p>";
         });
     </script>
 </body>
