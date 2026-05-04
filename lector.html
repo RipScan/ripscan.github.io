@@ -2,60 +2,34 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RipScan | Lector</title>
     <style>
-        :root { --bg: #050505; --accent: #00d4ff; }
-        body { background: var(--bg); color: white; margin: 0; font-family: 'Inter', sans-serif; }
-        
-        header { padding: 25px 5%; background: rgba(5,5,5,0.95); backdrop-filter: blur(15px); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1a1a1a; position: sticky; top: 0; z-index: 1000; }
-        .logo { font-size: 1.8rem; font-weight: 900; color: var(--accent); cursor: pointer; }
-        .nav-menu { display: flex; gap: 30px; }
-        .nav-menu a { color: #fff; text-decoration: none; font-size: 1rem; transition: 0.3s; }
-        .nav-menu a:hover { color: var(--accent); }
-        #search { background: #111; border: 1px solid #333; color: white; padding: 10px 20px; border-radius: 25px; width: 200px; }
-
-        .reader-nav { padding: 15px; display: flex; justify-content: center; gap: 15px; background: #0d0d0d; border-bottom: 1px solid #222; }
-        .btn { color: white; text-decoration: none; background: #1a1a1a; padding: 10px 20px; border-radius: 6px; font-weight: bold; border: 1px solid #333; }
-        .lector-img { width: 100%; max-width: 800px; display: block; margin: 0 auto; }
+        body { background: #000; color: white; text-align: center; margin: 0; padding: 20px; }
+        .reader-nav { position: sticky; top: 0; background: #121212; padding: 15px; z-index: 100; border-bottom: 1px solid #333; }
+        #viewer { max-width: 800px; margin: 20px auto; }
+        img { width: 100%; display: block; margin-bottom: 5px; }
+        .btn { background: #a855f7; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; }
     </style>
 </head>
 <body>
-
-    <header>
-        <div class="logo" onclick="location.href='index.html'">RIPSCAN</div>
-        <nav class="nav-menu">
-            <a href="index.html">Inicio</a>
-            <a href="mis-manhwas.html" style="color:var(--accent);">Mis Manhwas</a>        </nav>
-        <input type="text" id="search" placeholder="🔍 Buscar..." onkeyup="handleSearch(event)">
-    </header>
-
     <div class="reader-nav">
-        <a id="btnPrev" class="btn">⬅ Ant</a>
-        <a id="btnInfo" class="btn">Info</a>
-        <a id="btnNext" class="btn">Sig ➡</a>
+        <a href="index.html" class="btn">Volver a Inicio</a>
+        <span id="capInfo" style="margin: 0 20px;">Capítulo X</span>
     </div>
-
-    <div id="container" style="padding-top:20px;"></div>
+    <div id="viewer"></div>
 
     <script>
-        const p = new URLSearchParams(window.location.search);
-        const id = p.get('manga'), cap = parseInt(p.get('cap'));
-        document.getElementById('btnInfo').href = `info.html?manga=${id}`;
-        document.getElementById('btnNext').href = `lector.html?manga=${id}&cap=${cap + 1}`;
-        if(cap > 1) document.getElementById('btnPrev').href = `lector.html?manga=${id}&cap=${cap - 1}`;
-        else document.getElementById('btnPrev').style.display = "none";
-
-        let page = 1;
-        function load() {
-            const img = new Image();
-            img.src = `mangas/${id}/cap-${cap}/${String(page).padStart(3, '0')}.png`;
-            img.className = "lector-img";
-            img.onerror = () => { if(page > 1) console.log("Fin del capítulo"); };
-            img.onload = () => { document.getElementById('container').appendChild(img); page++; load(); };
+        const params = new URLSearchParams(window.location.search);
+        const manga = params.get('manga');
+        const cap = params.get('cap');
+        document.getElementById('capInfo').innerText = `Capítulo ${cap}`;
+        
+        // Asumiendo que tus imágenes están en: img/mangas/manga-id/cap-num/1.jpg, 2.jpg...
+        // Aquí puedes cambiar el límite de páginas si lo necesitas
+        const viewer = document.getElementById('viewer');
+        for(let i=1; i<=10; i++) {
+            viewer.innerHTML += `<img src="img/mangas/${manga}/${cap}/${i}.jpg" onerror="this.style.display='none'">`;
         }
-        load();
-        function handleSearch(e) { if(e.key === 'Enter') window.location.href = `index.html?search=${e.target.value}`; }
     </script>
 </body>
 </html>
