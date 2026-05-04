@@ -20,7 +20,6 @@
 
         /* Header Consistente */
         header { padding: 20px 6%; background: rgba(18, 18, 18, 0.95); backdrop-filter: blur(20px); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 1000; }
-        
         .logo-container { cursor: pointer; display: flex; align-items: center; gap: 10px; }
         .logo-icon { font-size: 1.8rem; color: var(--accent-primary); }
         .logo-text { font-weight: 800; font-size: 1.5rem; color: var(--accent-primary); letter-spacing: 1px; }
@@ -30,6 +29,11 @@
         .nav-menu a:hover { color: var(--accent-primary); }
 
         #search { background: #1a1a1a; border: 1px solid #333; color: white; padding: 10px 20px; border-radius: 25px; width: 250px; }
+
+        /* Menú Hamburguesa (oculto en PC) */
+        .menu-btn { display: none; font-size: 1.5rem; cursor: pointer; color: white; }
+        .mobile-nav { display: none; position: absolute; top: 100%; left: 0; width: 100%; background: #111; padding: 20px; border-bottom: 1px solid #333; flex-direction: column; gap: 15px; z-index: 999; }
+        .mobile-nav a { color: white; text-decoration: none; font-weight: 600; font-size: 1.2rem; }
 
         /* Contenido */
         .container { padding: 40px 6%; }
@@ -41,20 +45,42 @@
         .card:hover { transform: translateY(-5px); border-color: var(--accent-primary); }
         .card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 8px; }
         .card h3 { font-size: 0.9rem; margin-top: 10px; color: var(--text-main); }
+
+        /* Responsive Mobile */
+        @media (max-width: 600px) {
+            header { position: relative; padding: 15px 4%; }
+            .nav-menu { display: none; }
+            .menu-btn { display: block; }
+            .logo-container { position: absolute; left: 50%; transform: translateX(-50%); }
+            #search { width: 100px; padding: 6px 12px; font-size: 0.8rem; }
+            
+            .grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        }
     </style>
 </head>
 <body>
 
     <header>
+        <div class="menu-btn" onclick="toggleMenu()">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+
         <div class="logo-container" onclick="location.href='index.html'">
             <i class="fa-solid fa-skull logo-icon"></i>
             <span class="logo-text">RIPSCAN</span>
         </div>
+
         <nav class="nav-menu">
             <a href="index.html">Inicio</a>
             <a href="mis-manhwas.html" style="color: var(--accent-primary);">Mis Manhwas</a>
         </nav>
+
         <input type="text" id="search" placeholder="Buscar..." onkeyup="handleSearch(event)">
+
+        <div class="mobile-nav" id="mobileMenu">
+            <a href="index.html">Inicio</a>
+            <a href="mis-manhwas.html">Mis Manhwas</a>
+        </div>
     </header>
 
     <div class="container">
@@ -63,6 +89,11 @@
     </div>
 
     <script>
+        function toggleMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.style.display = (menu.style.display === 'flex') ? 'none' : 'flex';
+        }
+
         function handleSearch(e) {
             if(e.key === 'Enter') window.location.href = `index.html?search=${e.target.value}`;
         }
