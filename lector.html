@@ -19,10 +19,15 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background-color: var(--bg-deep); color: var(--text-main); font-family: 'Inter', sans-serif; line-height: 1.6; }
 
-        /* Header Consistente */
-        header { padding: 20px 6%; background: rgba(18, 18, 18, 0.95); backdrop-filter: blur(20px); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 1000; transition: transform 0.3s ease-in-out; }
+        /* Header con transición */
+        header { 
+            padding: 20px 6%; background: rgba(18, 18, 18, 0.95); backdrop-filter: blur(20px); 
+            display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; 
+            position: sticky; top: 0; z-index: 1000; 
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out; 
+        }
+
         .logo-container { cursor: pointer; display: flex; align-items: center; gap: 10px; }
-        .logo-icon { font-size: 1.8rem; color: var(--accent-primary); }
         .logo-text { font-weight: 800; font-size: 1.5rem; color: var(--accent-primary); letter-spacing: 1px; }
 
         .nav-menu { display: flex; gap: 30px; }
@@ -31,13 +36,13 @@
 
         #search { background: #1a1a1a; border: 1px solid #333; color: white; padding: 10px 20px; border-radius: 25px; width: 250px; }
 
-        /* Menú Hamburguesa (oculto en PC) */
-        .menu-btn { display: none; font-size: 1.5rem; cursor: pointer; color: white; }
-        .mobile-nav { display: none; position: absolute; top: 100%; left: 0; width: 100%; background: #111; padding: 20px; border-bottom: 1px solid #333; flex-direction: column; gap: 15px; z-index: 999; }
-        .mobile-nav a { color: white; text-decoration: none; font-weight: 600; font-size: 1.2rem; }
-
-        /* Lector Nav */
-        .reader-nav { padding: 15px; display: flex; justify-content: center; gap: 15px; background: #0d0d0d; border-bottom: 1px solid #222; position: sticky; top: 75px; z-index: 900; transition: transform 0.3s ease-in-out; }
+        /* Lector Nav con transición */
+        .reader-nav { 
+            padding: 15px; display: flex; justify-content: center; gap: 15px; 
+            background: #0d0d0d; border-bottom: 1px solid #222; 
+            position: sticky; top: 75px; z-index: 900; 
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out; 
+        }
         .btn { color: white; text-decoration: none; background: #1a1a1a; padding: 10px 20px; border-radius: 6px; font-weight: 600; border: 1px solid #333; transition: 0.3s; }
         .btn:hover { border-color: var(--accent-primary); color: var(--accent-primary); }
         
@@ -45,12 +50,12 @@
 
         /* Responsive Mobile */
         @media (max-width: 600px) {
-            header { position: sticky; padding: 15px 4%; }
+            header { padding: 15px 4%; }
             .nav-menu { display: none; }
             .menu-btn { display: block; }
             .logo-container { position: absolute; left: 50%; transform: translateX(-50%); }
             #search { width: 100px; padding: 6px 12px; font-size: 0.8rem; }
-            .reader-nav { top: 60px; } /* Ajuste de altura para móvil */
+            .reader-nav { top: 60px; } 
         }
     </style>
 </head>
@@ -60,22 +65,14 @@
         <div class="menu-btn" onclick="toggleMenu()">
             <i class="fa-solid fa-bars"></i>
         </div>
-
         <div class="logo-container" onclick="location.href='index.html'">
             <span class="logo-text">RIPSCAN</span>
         </div>
-
         <nav class="nav-menu">
             <a href="index.html">Inicio</a>
             <a href="mis-manhwas.html">Mis Manhwas</a>
         </nav>
-
         <input type="text" id="search" placeholder="Buscar..." onkeyup="handleSearch(event)">
-
-        <div class="mobile-nav" id="mobileMenu">
-            <a href="index.html">Inicio</a>
-            <a href="mis-manhwas.html">Mis Manhwas</a>
-        </div>
     </header>
 
     <div class="reader-nav">
@@ -87,17 +84,36 @@
     <div id="container" style="padding-top:20px;"></div>
 
     <script>
-        function toggleMenu() {
-            const menu = document.getElementById('mobileMenu');
-            menu.style.display = (menu.style.display === 'flex') ? 'none' : 'flex';
-        }
+        // Lógica de Scroll mejorada
+        let lastScrollTop = 0;
+        const header = document.querySelector('header');
+        const readerNav = document.querySelector('.reader-nav');
 
+        window.addEventListener('scroll', function() {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            // Si bajamos más de 100px, escondemos ambos
+            if (scrollTop > lastScrollTop && scrollTop > 100) {
+                header.style.transform = 'translateY(-100%)';
+                readerNav.style.transform = 'translateY(-100%)';
+                header.style.opacity = '0';
+                readerNav.style.opacity = '0';
+            } 
+            // Si subimos, los volvemos a mostrar
+            else {
+                header.style.transform = 'translateY(0)';
+                readerNav.style.transform = 'translateY(0)';
+                header.style.opacity = '1';
+                readerNav.style.opacity = '1';
+            }
+            lastScrollTop = scrollTop;
+        });
+
+        // Tus funciones anteriores
         const p = new URLSearchParams(window.location.search);
         const id = p.get('manga'), cap = parseInt(p.get('cap'));
-        
         document.getElementById('btnInfo').href = `info.html?manga=${id}`;
         document.getElementById('btnNext').href = `lector.html?manga=${id}&cap=${cap + 1}`;
-        
         if(cap > 1) {
             document.getElementById('btnPrev').href = `lector.html?manga=${id}&cap=${cap - 1}`;
         } else {
@@ -109,7 +125,7 @@
             const img = new Image();
             img.src = `mangas/${id}/cap-${cap}/${String(page).padStart(3, '0')}.png`;
             img.className = "lector-img";
-            img.onerror = () => { if(page > 1) console.log("Fin del capítulo"); };
+            img.onerror = () => { if(page > 1) console.log("Fin"); };
             img.onload = () => { 
                 document.getElementById('container').appendChild(img); 
                 page++; 
@@ -117,30 +133,6 @@
             };
         }
         load();
-
-        function handleSearch(e) { 
-            if(e.key === 'Enter') window.location.href = `index.html?search=${e.target.value}`; 
-        }
-
-        // Lógica de scroll para esconder Header y Reader Nav
-        let lastScrollTop = 0;
-        const header = document.querySelector('header');
-        const readerNav = document.querySelector('.reader-nav');
-
-        window.addEventListener('scroll', function() {
-            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            
-            if (scrollTop > lastScrollTop && scrollTop > 100) {
-                // Bajando: esconder
-                header.style.transform = 'translateY(-100%)';
-                readerNav.style.transform = 'translateY(-100%)';
-            } else {
-                // Subiendo: mostrar
-                header.style.transform = 'translateY(0)';
-                readerNav.style.transform = 'translateY(0)';
-            }
-            lastScrollTop = scrollTop;
-        });
     </script>
 </body>
 </html>
