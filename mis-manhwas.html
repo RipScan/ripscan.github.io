@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mis Favoritos | RipScan</title>
+    <title>Mis Manhwas | RipScan</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -35,13 +35,12 @@
         .container { padding: 40px 6%; }
         h2 { color: var(--text-main); margin-bottom: 25px; font-size: 1.5rem; }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 25px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 25px; margin-bottom: 50px; }
         .card { background: var(--bg-surface); border-radius: 12px; padding: 10px; border: 1px solid #222; text-decoration: none; color: white; transition: 0.3s; display: flex; flex-direction: column; }
         .card:hover { transform: translateY(-5px); border-color: var(--accent-primary); }
         .card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 8px; }
         .card h3 { font-size: 0.9rem; margin-top: 10px; color: var(--text-main); }
 
-        /* Barra de progreso */
         .progress-container { width: 100%; background: #333; height: 6px; border-radius: 3px; margin-top: 10px; overflow: hidden; }
         .progress-bar { height: 100%; background: var(--accent-primary); width: 0%; transition: width 0.5s; }
 
@@ -75,7 +74,10 @@
 
     <div class="container">
         <h2>Mis Favoritos</h2>
-        <div class="grid" id="mangaGrid"></div>
+        <div class="grid" id="favGrid"></div>
+
+        <h2>Historial Reciente</h2>
+        <div class="grid" id="historyGrid"></div>
     </div>
 
     <script>
@@ -88,32 +90,39 @@
             if(e.key === 'Enter') window.location.href = `index.html?search=${e.target.value}`;
         }
 
-        fetch('mangas.json').then(r => r.json()).then(data => {
-            const favs = JSON.parse(localStorage.getItem('favs') || '[]');
-            const filtered = data.filter(m => favs.includes(m.id));
-            const grid = document.getElementById('mangaGrid');
-            
-            if (filtered.length === 0) {
-                grid.innerHTML = "<p style='color: var(--text-muted);'>No tienes favoritos todavía.</p>";
-                return;
-            }
+        // Función para renderizar tarjetas con barra de progreso
+        function renderCard(m) {
+            const readChapters = JSON.parse(localStorage.getItem(`read_${m.id}`) || '[]');
+            const progress = m.totalCaps > 0 ? Math.round((readChapters.length / m.totalCaps) * 100) : 0;
+            return `
+                <a href="info.html?manga=${m.id}" class="card">
+                    <img src="${m.imagen}">
+                    <h3>${m.titulo}</h3>
+                    <div class="progress-container">
+                        <div class="progress-bar" style="width: ${progress}%"></div>
+                    </div>
+                    <small style="color: var(--text-muted); font-size: 0.7rem; margin-top: 5px;">${progress}% leído</small>
+                </a>
+            `;
+        }
 
-            grid.innerHTML = filtered.map(m => {
-                // Cálculo del progreso
-                const readChapters = JSON.parse(localStorage.getItem(`read_${m.id}`) || '[]');
-                const progress = m.totalCaps > 0 ? Math.round((readChapters.length / m.totalCaps) * 100) : 0;
-                
-                return `
-                    <a href="info.html?manga=${m.id}" class="card">
-                        <img src="${m.imagen}">
-                        <h3>${m.titulo}</h3>
-                        <div class="progress-container">
-                            <div class="progress-bar" style="width: ${progress}%"></div>
-                        </div>
-                        <small style="color: var(--text-muted); font-size: 0.7rem; margin-top: 5px;">${progress}% leído</small>
-                    </a>
-                `;
-            }).join('');
+        fetch('mangas.json').then(r => r.json()).then(data => {
+            const gridFav = document.getElementById('favGrid');
+            const gridHist = document.getElementById('historyGrid');
+            
+            // Cargar Favoritos
+            const favs = JSON.parse(localStorage.getItem('favs') || '[]');
+            const favList = data.filter(m => favs.includes(m.id));
+            gridFav.innerHTML = favList.length > 0 
+                ? favList.map(m => renderCard(m)).join('') 
+                : "<p style='color: var(--text-muted);'>No tienes favoritos todavía.</p>";
+
+            // Cargar Historial
+            const historyIds = JSON.parse(localStorage.getItem('history') || '[]');
+            const historyList = historyIds.map(id => data.find(m => m.id === id)).filter(Boolean);
+            gridHist.innerHTML = historyList.length > 0 
+                ? historyList.map(m => renderCard(m)).join('') 
+                : "<p style='color: var(--text-muted);'>No has leído nada recientemente.</p>";
         });
     </script>
 </body>
