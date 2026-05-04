@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RipScan | Biblioteca</title>
-    <link rel="icon" type="image/png" href="favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
@@ -19,7 +18,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background-color: var(--bg-deep); color: var(--text-main); font-family: 'Inter', sans-serif; line-height: 1.6; }
 
-/* Header PC */
+        /* Header PC */
         header { 
             padding: 20px 6%; 
             background: var(--bg-deep); 
@@ -36,15 +35,11 @@
         .logo-icon { font-size: 2rem; color: var(--accent-primary); } 
         .logo-text { font-weight: 800; font-size: 1.5rem; color: var(--accent-primary); letter-spacing: 1px; }
 
-        /* --- AQUÍ VA TU NUEVA CLASE --- */
-        .logo-img {
-            height: 90px;      /* Cambia este valor para ajustar el tamaño */
-            width: auto;       /* Mantiene la proporción original */
-            display: block;    /* Mejora la alineación */
-        }
-
         .nav-menu { display: flex; gap: 30px; }
-        /* ... el resto de tu código sigue igual ... */
+        .nav-menu a { color: var(--text-main); text-decoration: none; font-weight: 600; }
+        .nav-menu a:hover { color: var(--accent-primary); }
+
+        #search { background: #1a1a1a; border: 1px solid #333; color: white; padding: 10px 20px; border-radius: 25px; width: 250px; }
 
         /* Menú Hamburguesa (oculto en PC) */
         .menu-btn { display: none; font-size: 1.5rem; cursor: pointer; color: white; }
@@ -104,7 +99,8 @@
         </div>
 
         <div class="logo-container" onclick="location.href='index.html'">
-            <img src="logo.png" class="logo-img" alt="RipScan">
+            <i class="fa-solid fa-skull logo-icon"></i>
+            <span class="logo-text">RIPSCAN</span>
         </div>
 
         <nav class="nav-menu">
