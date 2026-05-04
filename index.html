@@ -103,4 +103,36 @@
                     <img src="${m.imagen}" alt="${m.titulo}">
                     <h3>${m.titulo}</h3>
                     <div class="badges-container">
-                        ${m.generos.map(g => `<span class="badge">${g}</span>`).join('')
+                        ${m.generos.map(g => `<span class="badge">${g}</span>`).join('')}
+                    </div>
+                </a>
+            `).join('');
+        }
+
+        fetch('mangas.json')
+            .then(res => res.json())
+            .then(data => {
+                window.allData = data;
+                renderGrid(data);
+                
+                const conUpdates = data.filter(m => m.ultimosCaps && m.ultimosCaps.length > 0)
+                                       .sort((a,b) => new Date(b.ultimosCaps[0].fecha) - new Date(a.ultimosCaps[0].fecha));
+
+                document.getElementById('latestUpdates').innerHTML = conUpdates.slice(0, 4).map(m => `
+                    <div class="update-card">
+                        <img src="${m.imagen}" class="update-thumb" onclick="location.href='info.html?manga=${m.id}'">
+                        <div style="flex-grow:1;">
+                            <h3 style="margin-bottom:10px; color:white;">${m.titulo}</h3>
+                            ${m.ultimosCaps.map(c => `
+                                <div class="chapter-row">
+                                    <a href="lector.html?manga=${m.id}&cap=${c.numero}" class="chapter-link">Capítulo ${c.numero}</a>
+                                    <span class="chapter-time">${formatTimeAgo(c.fecha)}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `).join('');
+            });
+    </script>
+</body>
+</html>
