@@ -24,7 +24,7 @@
         .logo-icon { font-size: 1.8rem; color: var(--accent-primary); }
 
         .nav-menu { display: flex; gap: 30px; }
-        .nav-menu a { color: var(--text-main); text-decoration: none; font-weight: 600; transition: 0.3s; }
+        .nav-menu a { color: var(--text-main); text-decoration: none; font-weight: 600; }
         .nav-menu a:hover { color: var(--accent-primary); }
 
         #search { background: #1a1a1a; border: 1px solid #333; color: white; padding: 10px 20px; border-radius: 25px; width: 250px; }
@@ -40,18 +40,34 @@
         .card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 8px; }
         .card h3 { font-size: 0.9rem; margin-top: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        /* Sección Últimas Actualizaciones (Vertical) */
-        .updates-container { display: flex; flex-direction: column; gap: 20px; max-width: 800px; }
-        .update-card { display: flex; gap: 20px; align-items: flex-start; }
-        .update-thumb { width: 100px; height: 140px; object-fit: cover; border-radius: 8px; cursor: pointer; flex-shrink: 0; }
-        .update-info { flex-grow: 1; }
-        .update-info h3 { margin-bottom: 10px; font-size: 1.2rem; }
+        /* NUEVO: Últimas Actualizaciones (3 en fila) */
+        .updates-container { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 20px; 
+        }
+        
+        @media (max-width: 900px) { .updates-container { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 600px) { .updates-container { grid-template-columns: 1fr; } }
 
-        .chapter-list { display: flex; flex-direction: column; }
-        .chapter-row { display: flex; justify-content: space-between; padding: 6px 0; align-items: center; }
-        .chapter-link { color: var(--text-main); text-decoration: none; font-size: 0.95rem; }
-        .chapter-time { color: var(--text-muted); font-size: 0.85rem; }
-        .lock-icon { color: #fbbf24; margin-left: 5px; font-size: 0.8rem; }
+        .update-card { 
+            background: #0d0d0d; 
+            padding: 15px; 
+            border-radius: 12px; 
+            border: 1px solid #222; 
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .update-thumb { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; cursor: pointer; margin-bottom: 15px; }
+        
+        .update-info h3 { font-size: 1.1rem; margin-bottom: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        .chapter-list { display: flex; flex-direction: column; gap: 5px; }
+        .chapter-row { display: flex; justify-content: space-between; padding: 4px 0; align-items: center; }
+        .chapter-link { color: var(--text-main); text-decoration: none; font-size: 0.9rem; }
+        .chapter-time { color: var(--text-muted); font-size: 0.8rem; }
+        .lock-icon { color: #fbbf24; margin-left: 5px; font-size: 0.7rem; }
     </style>
 </head>
 <body>
@@ -113,7 +129,7 @@
             const conUpdates = data.filter(m => m.ultimosCaps && m.ultimosCaps.length > 0)
                                    .sort((a,b) => new Date(b.ultimosCaps[0].fecha) - new Date(a.ultimosCaps[0].fecha));
 
-            document.getElementById('latestUpdates').innerHTML = conUpdates.slice(0, 5).map(m => `
+            document.getElementById('latestUpdates').innerHTML = conUpdates.slice(0, 6).map(m => `
                 <div class="update-card">
                     <img src="${m.imagen}" class="update-thumb" onclick="location.href='info.html?manga=${m.id}'">
                     <div class="update-info">
