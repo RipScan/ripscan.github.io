@@ -18,7 +18,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background-color: var(--bg-deep); color: var(--text-main); font-family: 'Inter', sans-serif; line-height: 1.6; }
 
-        /* Header negro sólido */
+        /* Header PC (No tocar) */
         header { 
             padding: 20px 6%; 
             background: var(--bg-deep); 
@@ -45,7 +45,7 @@
         .container { padding: 40px 6%; }
         h2 { font-size: 1.5rem; margin-bottom: 25px; color: var(--text-main); }
 
-        /* Grid PC: Se mantiene como lo tenías */
+        /* Grid PC */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 25px; margin-bottom: 60px; }
         
         .card { background: var(--bg-surface); border-radius: 12px; padding: 10px; border: 1px solid #222; text-decoration: none; color: white; transition: 0.3s; }
@@ -65,20 +65,24 @@
 
         /* --- AJUSTES PERFECCIONADOS PARA CELULAR --- */
         @media (max-width: 600px) {
-            header { padding: 12px 4%; }
-            .container { padding: 20px 4%; }
+            /* Header más chico */
+            header { padding: 10px 4%; }
+            .logo-icon { font-size: 1.5rem; }
+            .logo-text { font-size: 1.2rem; }
+            .nav-menu { gap: 15px; }
+            #search { width: 100px; padding: 6px 12px; font-size: 0.8rem; }
             
-            /* Grid 3 columnas ultra compacto */
-            .grid { grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 30px; }
-            .card { padding: 6px; }
-            .card h3 { font-size: 0.65rem; margin-top: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+            /* Container y Grid más compacto */
+            .container { padding: 15px 4%; }
+            .grid { grid-template-columns: repeat(3, 1fr); gap: 4px; margin-bottom: 20px; }
+            .card { padding: 4px; } /* Tarjetas más pequeñas */
+            .card h3 { font-size: 0.65rem; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
             
-            /* Actualizaciones más delgadas */
+            /* Actualizaciones */
             .updates-container { grid-template-columns: 1fr; }
-            .update-card { padding: 10px; gap: 10px; }
-            .update-thumb { width: 60px; height: 85px; }
-            .chapter-row { padding: 3px 0; }
-            #search { width: 120px; padding: 8px 15px; }
+            .update-card { padding: 8px; gap: 8px; }
+            .update-thumb { width: 50px; height: 70px; }
+            .chapter-row { padding: 2px 0; }
         }
     </style>
 </head>
