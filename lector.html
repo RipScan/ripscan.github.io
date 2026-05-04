@@ -4,31 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RipScan | Lector</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        :root { --bg: #050505; --accent: #00d4ff; }
-        body { background: var(--bg); color: white; margin: 0; font-family: 'Inter', sans-serif; }
-        
-        header { padding: 25px 5%; background: rgba(5,5,5,0.95); backdrop-filter: blur(15px); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1a1a1a; position: sticky; top: 0; z-index: 1000; }
-        .logo { font-size: 1.8rem; font-weight: 900; color: var(--accent); cursor: pointer; }
-        .nav-menu { display: flex; gap: 30px; }
-        .nav-menu a { color: #fff; text-decoration: none; font-size: 1rem; transition: 0.3s; }
-        .nav-menu a:hover { color: var(--accent); }
-        #search { background: #111; border: 1px solid #333; color: white; padding: 10px 20px; border-radius: 25px; width: 200px; }
+        :root {
+            --bg-deep: #050505;
+            --bg-surface: #121212;
+            --accent-primary: #a855f7;
+            --text-main: #ffffff;
+            --text-muted: #a1a1aa;
+        }
 
-        .reader-nav { padding: 15px; display: flex; justify-content: center; gap: 15px; background: #0d0d0d; border-bottom: 1px solid #222; }
-        .btn { color: white; text-decoration: none; background: #1a1a1a; padding: 10px 20px; border-radius: 6px; font-weight: bold; border: 1px solid #333; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: var(--bg-deep); color: var(--text-main); font-family: 'Inter', sans-serif; line-height: 1.6; }
+
+        /* Header Consistente */
+        header { padding: 20px 6%; background: rgba(18, 18, 18, 0.95); backdrop-filter: blur(20px); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 1000; }
+        .logo-container { cursor: pointer; display: flex; align-items: center; gap: 10px; }
+        .logo-icon { font-size: 1.8rem; color: var(--accent-primary); }
+        .logo-text { font-weight: 800; font-size: 1.5rem; color: var(--accent-primary); letter-spacing: 1px; }
+
+        .nav-menu { display: flex; gap: 30px; }
+        .nav-menu a { color: var(--text-main); text-decoration: none; font-weight: 600; }
+        .nav-menu a:hover { color: var(--accent-primary); }
+
+        #search { background: #1a1a1a; border: 1px solid #333; color: white; padding: 10px 20px; border-radius: 25px; width: 250px; }
+
+        /* Lector Nav */
+        .reader-nav { padding: 20px; display: flex; justify-content: center; gap: 15px; background: #0d0d0d; border-bottom: 1px solid #222; position: sticky; top: 75px; z-index: 900; }
+        .btn { color: white; text-decoration: none; background: #1a1a1a; padding: 10px 20px; border-radius: 6px; font-weight: 600; border: 1px solid #333; transition: 0.3s; }
+        .btn:hover { border-color: var(--accent-primary); color: var(--accent-primary); }
+        
         .lector-img { width: 100%; max-width: 800px; display: block; margin: 0 auto; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo" onclick="location.href='index.html'">RIPSCAN</div>
+        <div class="logo-container" onclick="location.href='index.html'">
+            <i class="fa-solid fa-skull logo-icon"></i>
+            <span class="logo-text">RIPSCAN</span>
+        </div>
         <nav class="nav-menu">
             <a href="index.html">Inicio</a>
-            <a href="#" onclick="alert('Funcionalidad en desarrollo')">Mis Manhwas</a>
+            <a href="mis-manhwas.html">Mis Manhwas</a>
         </nav>
-        <input type="text" id="search" placeholder="🔍 Buscar..." onkeyup="handleSearch(event)">
+        <input type="text" id="search" placeholder="Buscar..." onkeyup="handleSearch(event)">
     </header>
 
     <div class="reader-nav">
@@ -42,10 +63,15 @@
     <script>
         const p = new URLSearchParams(window.location.search);
         const id = p.get('manga'), cap = parseInt(p.get('cap'));
+        
         document.getElementById('btnInfo').href = `info.html?manga=${id}`;
         document.getElementById('btnNext').href = `lector.html?manga=${id}&cap=${cap + 1}`;
-        if(cap > 1) document.getElementById('btnPrev').href = `lector.html?manga=${id}&cap=${cap - 1}`;
-        else document.getElementById('btnPrev').style.display = "none";
+        
+        if(cap > 1) {
+            document.getElementById('btnPrev').href = `lector.html?manga=${id}&cap=${cap - 1}`;
+        } else {
+            document.getElementById('btnPrev').style.display = "none";
+        }
 
         let page = 1;
         function load() {
@@ -53,10 +79,17 @@
             img.src = `mangas/${id}/cap-${cap}/${String(page).padStart(3, '0')}.png`;
             img.className = "lector-img";
             img.onerror = () => { if(page > 1) console.log("Fin del capítulo"); };
-            img.onload = () => { document.getElementById('container').appendChild(img); page++; load(); };
+            img.onload = () => { 
+                document.getElementById('container').appendChild(img); 
+                page++; 
+                load(); 
+            };
         }
         load();
-        function handleSearch(e) { if(e.key === 'Enter') window.location.href = `index.html?search=${e.target.value}`; }
+
+        function handleSearch(e) { 
+            if(e.key === 'Enter') window.location.href = `index.html?search=${e.target.value}`; 
+        }
     </script>
 </body>
 </html>
