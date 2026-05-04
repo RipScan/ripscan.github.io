@@ -8,19 +8,13 @@
         :root { --bg: #050505; --accent: #00d4ff; --card: #121212; }
         body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; }
         
-        /* Header Profesional */
-        header { 
-            padding: 25px 5%; background: rgba(5,5,5,0.95); backdrop-filter: blur(15px); 
-            display: flex; justify-content: space-between; align-items: center; 
-            border-bottom: 1px solid #1a1a1a; position: sticky; top: 0; z-index: 1000;
-        }
+        header { padding: 25px 5%; background: rgba(5,5,5,0.95); backdrop-filter: blur(15px); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1a1a1a; position: sticky; top: 0; z-index: 1000; }
         .logo { font-size: 1.8rem; font-weight: 900; color: var(--accent); cursor: pointer; letter-spacing: -1px; }
         .nav-menu { display: flex; gap: 30px; }
         .nav-menu a { color: #fff; text-decoration: none; font-size: 1rem; font-weight: 500; transition: 0.3s; }
         .nav-menu a:hover { color: var(--accent); }
         #search { background: #111; border: 1px solid #333; color: white; padding: 10px 20px; border-radius: 25px; width: 200px; font-size: 0.9rem; }
 
-        /* Grid */
         .container { padding: 40px 5%; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 25px; }
         .card { background: var(--card); border-radius: 16px; padding: 12px; border: 1px solid #1a1a1a; transition: all 0.4s; text-decoration: none; color: white; display: block; }
@@ -30,40 +24,31 @@
     </style>
 </head>
 <body>
-
     <header>
         <div class="logo" onclick="location.href='index.html'">RIPSCAN</div>
         <nav class="nav-menu">
             <a href="index.html">Inicio</a>
-            <a href="#" onclick="alert('Funcionalidad en desarrollo')">Mis Manhwas</a>
+            <a href="mis-manhwas.html">Mis Manhwas</a>
         </nav>
         <input type="text" id="search" placeholder="🔍 Buscar..." onkeyup="filter()">
     </header>
-
     <div class="container">
         <h2 style="margin-bottom: 20px;">Biblioteca</h2>
         <div class="grid" id="mangaGrid"></div>
     </div>
-
     <script>
-        let mangaData = [];
         fetch('mangas.json').then(res => res.json()).then(data => {
-            mangaData = data;
             render(data);
+            window.allData = data;
         });
-
         function render(data) {
             document.getElementById('mangaGrid').innerHTML = data.map(m => `
-                <a href="info.html?manga=${m.id}" class="card">
-                    <img src="${m.imagen}" alt="${m.titulo}">
-                    <h3>${m.titulo}</h3>
-                </a>
+                <a href="info.html?manga=${m.id}" class="card"><img src="${m.imagen}"><h3>${m.titulo}</h3></a>
             `).join('');
         }
-
         function filter() {
             const val = document.getElementById('search').value.toLowerCase();
-            render(mangaData.filter(m => m.titulo.toLowerCase().includes(val)));
+            render(window.allData.filter(m => m.titulo.toLowerCase().includes(val)));
         }
     </script>
 </body>
