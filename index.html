@@ -27,21 +27,19 @@
         .nav-menu a:hover { color: var(--accent-primary); }
         #search { background: #1a1a1a; border: 1px solid #333; color: white; padding: 10px 20px; border-radius: 25px; width: 250px; }
 
-        /* Filtros */
-        .filters { display: flex; gap: 15px; margin: 20px 0 30px 0; }
-        .filters select { background: #1a1a1a; color: white; border: 1px solid #333; padding: 10px 15px; border-radius: 8px; cursor: pointer; }
-
         /* Grid */
         .container { padding: 40px 6%; }
         h2 { font-size: 1.5rem; margin-bottom: 25px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 25px; margin-bottom: 60px; }
         
-        .card { background: var(--bg-surface); border-radius: 12px; padding: 10px; border: 1px solid #222; text-decoration: none; color: white; transition: 0.3s; display: block;}
+        .card { position: relative; background: var(--bg-surface); border-radius: 12px; padding: 10px; border: 1px solid #222; text-decoration: none; color: white; transition: 0.3s; display: block;}
         .card:hover { transform: translateY(-5px); border-color: var(--accent-primary); }
         .card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 8px; }
-        .card h3 { font-size: 0.9rem; margin-top: 10px; }
         
-        /* Badges de Género */
+        /* Badge de estado sobre la imagen */
+        .status-badge { position: absolute; top: 18px; left: 18px; background: var(--accent-primary); color: white; padding: 3px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; z-index: 2; }
+        
+        .card h3 { font-size: 0.9rem; margin-top: 10px; }
         .badges-container { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
         .badge { font-size: 0.65rem; background: #262626; color: #a1a1aa; padding: 2px 6px; border-radius: 4px; border: 1px solid #333; }
 
@@ -73,26 +71,6 @@
 
     <div class="container">
         <h2>Biblioteca</h2>
-        
-        <div class="filters">
-            <select id="filterStatus" onchange="applyFilters()">
-                <option value="Todos">Todos los Estados</option>
-                <option value="ongoing">En Emisión</option>
-                <option value="hiatus">Hiatus</option>
-                <option value="finalizado">Finalizado</option>
-            </select>
-
-            <select id="filterGenre" onchange="applyFilters()">
-                <option value="Todos">Todos los Géneros</option>
-                <option value="Accion">Acción</option>
-                <option value="Fantasia">Fantasía</option>
-                <option value="Aventura">Aventura</option>
-                <option value="Magia">Magia</option>
-                <option value="Ecchi">Ecchi</option>
-                <option value="Reencarnacion">Reencarnación</option>
-            </select>
-        </div>
-
         <div class="grid" id="mangaGrid"></div>
 
         <h2>Últimas Actualizaciones</h2>
@@ -112,18 +90,6 @@
             return `Hace ${days}d`;
         }
 
-        function applyFilters() {
-            const estado = document.getElementById('filterStatus').value;
-            const genero = document.getElementById('filterGenre').value;
-
-            const filtered = window.allData.filter(m => {
-                const matchStatus = (estado === "Todos" || m.estado === estado);
-                const matchGenre = (genero === "Todos" || m.generos.includes(genero));
-                return matchStatus && matchGenre;
-            });
-            renderGrid(filtered);
-        }
-
         function handleSearch() {
             const query = document.getElementById('search').value.toLowerCase();
             const filtered = window.allData.filter(m => m.titulo.toLowerCase().includes(query));
@@ -133,40 +99,8 @@
         function renderGrid(data) {
             document.getElementById('mangaGrid').innerHTML = data.map(m => `
                 <a href="info.html?manga=${m.id}" class="card">
+                    <span class="status-badge">${m.estado === 'ongoing' ? 'En Emisión' : m.estado}</span>
                     <img src="${m.imagen}" alt="${m.titulo}">
                     <h3>${m.titulo}</h3>
                     <div class="badges-container">
-                        ${m.generos.map(g => `<span class="badge">${g}</span>`).join('')}
-                    </div>
-                </a>
-            `).join('');
-        }
-
-        fetch('mangas.json')
-            .then(res => res.json())
-            .then(data => {
-                window.allData = data;
-                renderGrid(data);
-                
-                // Actualizaciones
-                const conUpdates = data.filter(m => m.ultimosCaps && m.ultimosCaps.length > 0)
-                                       .sort((a,b) => new Date(b.ultimosCaps[0].fecha) - new Date(a.ultimosCaps[0].fecha));
-
-                document.getElementById('latestUpdates').innerHTML = conUpdates.slice(0, 4).map(m => `
-                    <div class="update-card">
-                        <img src="${m.imagen}" class="update-thumb" onclick="location.href='info.html?manga=${m.id}'">
-                        <div style="flex-grow:1;">
-                            <h3 style="margin-bottom:10px; color:white;">${m.titulo}</h3>
-                            ${m.ultimosCaps.map(c => `
-                                <div class="chapter-row">
-                                    <a href="lector.html?manga=${m.id}&cap=${c.numero}" class="chapter-link">Capítulo ${c.numero}</a>
-                                    <span class="chapter-time">${formatTimeAgo(c.fecha)}</span>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `).join('');
-            });
-    </script>
-</body>
-</html>
+                        ${m.generos.map(g => `<span class="badge">${g}</span>`).join('')
