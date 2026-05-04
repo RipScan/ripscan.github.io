@@ -19,11 +19,14 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background-color: var(--bg-deep); color: var(--text-main); font-family: 'Inter', sans-serif; line-height: 1.6; }
 
-        /* Header */
-        header { padding: 15px 6%; background: rgba(18, 18, 18, 0.95); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 1000; }
-        .nav-left { display: flex; align-items: center; gap: 30px; }
+        /* Header con 3 columnas */
+        header { padding: 15px 6%; background: rgba(18, 18, 18, 0.95); display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 1000; }
+        .header-left { flex: 1; display: flex; justify-content: flex-start; }
+        .header-center { flex: 1; display: flex; justify-content: center; }
+        .header-right { flex: 1; display: flex; justify-content: flex-end; }
+
         .logo-text { font-weight: 800; font-size: 1.5rem; color: var(--accent-primary); cursor: pointer; }
-        .nav-menu { display: flex; gap: 20px; }
+        .nav-menu { display: flex; gap: 30px; }
         .nav-menu a { color: var(--text-main); text-decoration: none; font-weight: 600; }
         .nav-menu a:hover { color: var(--accent-primary); }
         #search { background: #1a1a1a; border: 1px solid #333; color: white; padding: 8px 15px; border-radius: 20px; width: 200px; }
@@ -45,22 +48,26 @@
         .cap-meta { color: var(--text-muted); font-size: 0.75rem; display: flex; gap: 10px; align-items: center; }
         .eye-icon { font-size: 1.2rem; cursor: pointer; transition: 0.3s; }
 
-        .btn-action { background: #1a1a1a; padding: 10px 20px; border-radius: 6px; text-decoration: none; color: white; border: 1px solid #333; display: inline-block; margin-right: 10px; font-size: 0.9rem;}
+        .btn-action { background: #1a1a1a; padding: 10px 20px; border-radius: 6px; text-decoration: none; color: white; border: 1px solid #333; display: inline-block; margin-right: 10px; font-size: 0.9rem; cursor: pointer;}
         
-        @media (max-width: 600px) { .manga-header { flex-direction: column; } }
+        @media (max-width: 600px) { .manga-header { flex-direction: column; } .nav-menu { gap: 15px; font-size: 0.8rem; } }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="nav-left">
+        <div class="header-left">
             <div class="logo-text" onclick="location.href='index.html'">RIPSCAN</div>
+        </div>
+        <div class="header-center">
             <nav class="nav-menu">
                 <a href="index.html">Inicio</a>
                 <a href="mis-manhwas.html">Mis Manhwas</a>
             </nav>
         </div>
-        <input type="text" id="search" placeholder="Buscar..." onkeyup="handleSearch(event)">
+        <div class="header-right">
+            <input type="text" id="search" placeholder="Buscar..." onkeyup="handleSearch(event)">
+        </div>
     </header>
 
     <div class="container">
@@ -73,6 +80,9 @@
                 <p id="sinopsis" style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;"></p>
                 <a id="btnPrimero" class="btn-action">Primer Cap</a>
                 <a id="btnUltimo" class="btn-action">Último Cap</a>
+                <button id="btnFav" class="btn-action" onclick="toggleFavorite()">
+                    <i class="fa-regular fa-heart"></i> Favorito
+                </button>
             </div>
         </div>
 
@@ -86,7 +96,7 @@
     <script>
         const id = new URLSearchParams(window.location.search).get('manga');
         let mangaData = null;
-        let sortOrder = 'desc'; 
+        let sortOrder = 'asc'; // Ascendente por defecto
 
         function handleSearch(e) {
             if(e.key === 'Enter') window.location.href = `index.html?search=${e.target.value}`;
@@ -95,6 +105,28 @@
         function toggleSort() {
             sortOrder = (sortOrder === 'desc') ? 'asc' : 'desc';
             renderChapters();
+        }
+
+        // Favoritos
+        function toggleFavorite() {
+            let favs = JSON.parse(localStorage.getItem('favorites') || '[]');
+            const btn = document.getElementById('btnFav');
+            if (favs.includes(id)) {
+                favs = favs.filter(x => x !== id);
+                btn.innerHTML = '<i class="fa-regular fa-heart"></i> Favorito';
+            } else {
+                favs.push(id);
+                btn.innerHTML = '<i class="fa-solid fa-heart" style="color: #ff4d4d;"></i> Favorito';
+            }
+            localStorage.setItem('favorites', JSON.stringify(favs));
+        }
+
+        function checkFavorite() {
+            const favs = JSON.parse(localStorage.getItem('favorites') || '[]');
+            const btn = document.getElementById('btnFav');
+            if (favs.includes(id)) {
+                btn.innerHTML = '<i class="fa-solid fa-heart" style="color: #ff4d4d;"></i> Favorito';
+            }
         }
 
         function toggleRead(event, mangaId, cap, element) {
@@ -156,6 +188,7 @@
             document.getElementById('btnUltimo').href = `lector.html?manga=${id}&cap=${mangaData.totalCaps}`;
             document.getElementById('mangaGenres').innerHTML = mangaData.generos.map(g => `<span class="badge">${g}</span>`).join('');
 
+            checkFavorite();
             renderChapters(); 
         });
     </script>
