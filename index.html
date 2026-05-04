@@ -2,25 +2,36 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RipScan | Biblioteca</title>
     <style>
         :root { --bg: #050505; --accent: #00d4ff; --card: #121212; }
         body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; }
         
+        /* Header */
         header { padding: 25px 5%; background: rgba(5,5,5,0.95); backdrop-filter: blur(15px); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1a1a1a; position: sticky; top: 0; z-index: 1000; }
-        .logo { font-size: 1.8rem; font-weight: 900; color: var(--accent); cursor: pointer; letter-spacing: -1px; }
+        .logo { font-size: 1.8rem; font-weight: 900; color: var(--accent); cursor: pointer; }
         .nav-menu { display: flex; gap: 30px; }
-        .nav-menu a { color: #fff; text-decoration: none; font-size: 1rem; font-weight: 500; transition: 0.3s; }
+        .nav-menu a { color: #fff; text-decoration: none; font-size: 1rem; }
         .nav-menu a:hover { color: var(--accent); }
-        #search { background: #111; border: 1px solid #333; color: white; padding: 10px 20px; border-radius: 25px; width: 200px; font-size: 0.9rem; }
+        #search { background: #111; border: 1px solid #333; color: white; padding: 10px 20px; border-radius: 25px; width: 200px; }
 
         .container { padding: 40px 5%; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 25px; }
-        .card { background: var(--card); border-radius: 16px; padding: 12px; border: 1px solid #1a1a1a; transition: all 0.4s; text-decoration: none; color: white; display: block; }
-        .card:hover { transform: translateY(-10px); border-color: var(--accent); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+        
+        /* Grid Principal */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 25px; margin-bottom: 50px; }
+        .card { background: var(--card); border-radius: 16px; padding: 12px; border: 1px solid #1a1a1a; transition: 0.4s; text-decoration: none; color: white; display: block; }
+        .card:hover { transform: translateY(-10px); border-color: var(--accent); }
         .card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 10px; }
-        .card h3 { font-size: 0.95rem; margin: 12px 0 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        
+        /* Seccion Latest Updates */
+        .updates-section { max-width: 600px; }
+        .update-card { display: flex; gap: 20px; background: #0d0d0d; padding: 15px; border-radius: 12px; border: 1px solid #1a1a1a; margin-bottom: 15px; }
+        .update-card img { width: 80px; height: 110px; object-fit: cover; border-radius: 6px; cursor: pointer; }
+        .update-info { flex-grow: 1; }
+        .chapter-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #1a1a1a; font-size: 0.9rem; }
+        .chapter-num { cursor: pointer; color: #fff; text-decoration: none; }
+        .chapter-num:hover { color: var(--accent); }
+        .chapter-time { color: #666; font-size: 0.8rem; }
     </style>
 </head>
 <body>
@@ -30,26 +41,62 @@
             <a href="index.html">Inicio</a>
             <a href="mis-manhwas.html">Mis Manhwas</a>
         </nav>
-        <input type="text" id="search" placeholder="🔍 Buscar..." onkeyup="filter()">
+        <input type="text" id="search" placeholder="🔍 Buscar..." onkeyup="handleSearch(event)">
     </header>
+
     <div class="container">
-        <h2 style="margin-bottom: 20px;">Biblioteca</h2>
+        <h2>Biblioteca</h2>
         <div class="grid" id="mangaGrid"></div>
+
+        <section class="updates-section">
+            <h2 style="margin-bottom: 20px;">Latest Updates</h2>
+            <div id="latestUpdates"></div>
+        </section>
     </div>
+
     <script>
+        // Función para calcular tiempo automático
+        function formatTimeAgo(isoDate) {
+            const now = new Date();
+            const past = new Date(isoDate);
+            const diff = now - past;
+            const mins = Math.floor(diff / 60000);
+            const hours = Math.floor(mins / 60);
+            const days = Math.floor(hours / 24);
+            
+            if (mins < 1) return "Just now";
+            if (mins < 60) return `${mins}m`;
+            if (hours < 24) return `${hours}h`;
+            if (days < 7) return `${days}d`;
+            return `${Math.floor(days/7)}w`;
+        }
+
+        function handleSearch(e) { if(e.key === 'Enter') window.location.href = `index.html?search=${e.target.value}`; }
+
         fetch('mangas.json').then(res => res.json()).then(data => {
-            render(data);
-            window.allData = data;
-        });
-        function render(data) {
+            // Render Biblioteca
             document.getElementById('mangaGrid').innerHTML = data.map(m => `
                 <a href="info.html?manga=${m.id}" class="card"><img src="${m.imagen}"><h3>${m.titulo}</h3></a>
             `).join('');
-        }
-        function filter() {
-            const val = document.getElementById('search').value.toLowerCase();
-            render(window.allData.filter(m => m.titulo.toLowerCase().includes(val)));
-        }
+
+            // Render Latest Updates
+            document.getElementById('latestUpdates').innerHTML = data.map(m => `
+                <div class="update-card">
+                    <img src="${m.imagen}" onclick="location.href='info.html?manga=${m.id}'">
+                    <div class="update-info">
+                        <h3 style="margin:0 0 10px 0;">${m.titulo}</h3>
+                        ${m.ultimosCaps.map(c => `
+                            <div class="chapter-item">
+                                <a href="lector.html?manga=${m.id}&cap=${c.numero}" class="chapter-num">
+                                    Capítulo ${c.numero} ${c.bloqueado ? '🔒' : ''}
+                                </a>
+                                <span class="chapter-time">${formatTimeAgo(c.fecha)}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        });
     </script>
 </body>
 </html>
