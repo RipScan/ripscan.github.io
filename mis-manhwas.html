@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mis Manhwas | RipScan</title>
+    <style>
+        /* Copia el mismo CSS del index.html aquí */
+        :root { --bg: #050505; --accent: #00d4ff; --card: #121212; }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; }
+        header { padding: 25px 5%; background: rgba(5,5,5,0.95); backdrop-filter: blur(15px); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1a1a1a; }
+        .logo { font-size: 1.8rem; font-weight: 900; color: var(--accent); cursor: pointer; }
+        .container { padding: 40px 5%; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 25px; }
+        .card { background: var(--card); border-radius: 16px; padding: 12px; border: 1px solid #1a1a1a; transition: 0.4s; text-decoration: none; color: white; display: block; }
+        .card:hover { transform: translateY(-10px); border-color: var(--accent); }
+        .card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 10px; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo" onclick="location.href='index.html'">RIPSCAN</div>
+        <nav class="nav-menu">
+            <a href="index.html">Inicio</a>
+            <a href="mis-manhwas.html" style="color:var(--accent);">Mis Manhwas</a>
+        </nav>
+    </header>
+    <div class="container">
+        <h2>Mis Favoritos</h2>
+        <div class="grid" id="mangaGrid"></div>
+    </div>
+    <script>
+        fetch('mangas.json').then(r => r.json()).then(data => {
+            const favs = JSON.parse(localStorage.getItem('favs') || '[]');
+            const filtered = data.filter(m => favs.includes(m.id));
+            const grid = document.getElementById('mangaGrid');
+            grid.innerHTML = filtered.length > 0 ? 
+                filtered.map(m => `<a href="info.html?manga=${m.id}" class="card"><img src="${m.imagen}"><h3>${m.titulo}</h3></a>`).join('') :
+                "<p>No tienes favoritos todavía.</p>";
+        });
+    </script>
+</body>
+</html>
