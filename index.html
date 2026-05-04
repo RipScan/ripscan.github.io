@@ -2,32 +2,34 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RipScan | Biblioteca</title>
     <style>
         :root { --bg: #050505; --accent: #00d4ff; --card: #121212; }
         body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; }
         
-        /* Header */
+        /* Header Profesional */
         header { padding: 25px 5%; background: rgba(5,5,5,0.95); backdrop-filter: blur(15px); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1a1a1a; position: sticky; top: 0; z-index: 1000; }
-        .logo { font-size: 1.8rem; font-weight: 900; color: var(--accent); cursor: pointer; }
+        .logo { font-size: 1.8rem; font-weight: 900; color: var(--accent); cursor: pointer; letter-spacing: -1px; }
         .nav-menu { display: flex; gap: 30px; }
-        .nav-menu a { color: #fff; text-decoration: none; font-size: 1rem; }
+        .nav-menu a { color: #fff; text-decoration: none; font-size: 1rem; font-weight: 500; transition: 0.3s; }
         .nav-menu a:hover { color: var(--accent); }
-        #search { background: #111; border: 1px solid #333; color: white; padding: 10px 20px; border-radius: 25px; width: 200px; }
+        #search { background: #111; border: 1px solid #333; color: white; padding: 10px 20px; border-radius: 25px; width: 200px; font-size: 0.9rem; }
 
         .container { padding: 40px 5%; }
         
-        /* Grid Principal */
+        /* Biblioteca Grid */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 25px; margin-bottom: 50px; }
-        .card { background: var(--card); border-radius: 16px; padding: 12px; border: 1px solid #1a1a1a; transition: 0.4s; text-decoration: none; color: white; display: block; }
+        .card { background: var(--card); border-radius: 16px; padding: 12px; border: 1px solid #1a1a1a; transition: all 0.4s; text-decoration: none; color: white; display: block; }
         .card:hover { transform: translateY(-10px); border-color: var(--accent); }
         .card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 10px; }
-        
-        /* Seccion Latest Updates */
+        .card h3 { font-size: 0.95rem; margin: 12px 0 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        /* Sección Últimas Actualizaciones */
         .updates-section { max-width: 600px; }
         .update-card { display: flex; gap: 20px; background: #0d0d0d; padding: 15px; border-radius: 12px; border: 1px solid #1a1a1a; margin-bottom: 15px; }
         .update-card img { width: 80px; height: 110px; object-fit: cover; border-radius: 6px; cursor: pointer; }
-        .update-info { flex-grow: 1; }
+        .update-info { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
         .chapter-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #1a1a1a; font-size: 0.9rem; }
         .chapter-num { cursor: pointer; color: #fff; text-decoration: none; }
         .chapter-num:hover { color: var(--accent); }
@@ -35,6 +37,7 @@
     </style>
 </head>
 <body>
+
     <header>
         <div class="logo" onclick="location.href='index.html'">RIPSCAN</div>
         <nav class="nav-menu">
@@ -49,13 +52,13 @@
         <div class="grid" id="mangaGrid"></div>
 
         <section class="updates-section">
-            <h2 style="margin-bottom: 20px;">Latest Updates</h2>
+            <h2 style="margin-bottom: 20px;">Últimas Actualizaciones</h2>
             <div id="latestUpdates"></div>
         </section>
     </div>
 
     <script>
-        // Función para calcular tiempo automático
+        // Función de tiempo automático en español
         function formatTimeAgo(isoDate) {
             const now = new Date();
             const past = new Date(isoDate);
@@ -64,23 +67,38 @@
             const hours = Math.floor(mins / 60);
             const days = Math.floor(hours / 24);
             
-            if (mins < 1) return "Just now";
+            if (mins < 1) return "Hace un momento";
             if (mins < 60) return `${mins}m`;
             if (hours < 24) return `${hours}h`;
             if (days < 7) return `${days}d`;
-            return `${Math.floor(days/7)}w`;
+            return `${Math.floor(days/7)}s`; // 's' de semanas
         }
 
-        function handleSearch(e) { if(e.key === 'Enter') window.location.href = `index.html?search=${e.target.value}`; }
+        // Buscador
+        function handleSearch(e) {
+            if(e.key === 'Enter') {
+                const query = e.target.value.toLowerCase();
+                const filtered = window.allData.filter(m => m.titulo.toLowerCase().includes(query));
+                render(filtered);
+            }
+        }
 
-        fetch('mangas.json').then(res => res.json()).then(data => {
-            // Render Biblioteca
+        function render(data) {
             document.getElementById('mangaGrid').innerHTML = data.map(m => `
-                <a href="info.html?manga=${m.id}" class="card"><img src="${m.imagen}"><h3>${m.titulo}</h3></a>
+                <a href="info.html?manga=${m.id}" class="card">
+                    <img src="${m.imagen}">
+                    <h3>${m.titulo}</h3>
+                </a>
             `).join('');
+        }
 
-            // Render Latest Updates
-            document.getElementById('latestUpdates').innerHTML = data.map(m => `
+        // Carga de datos
+        fetch('mangas.json').then(res => res.json()).then(data => {
+            window.allData = data;
+            render(data);
+            
+            // Render de Últimas Actualizaciones (tomamos los 3 primeros)
+            document.getElementById('latestUpdates').innerHTML = data.slice(0, 3).map(m => `
                 <div class="update-card">
                     <img src="${m.imagen}" onclick="location.href='info.html?manga=${m.id}'">
                     <div class="update-info">
