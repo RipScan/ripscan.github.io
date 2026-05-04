@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RipScan | Lector</title>
+    <style>
+        :root { --bg: #050505; --accent: #00d4ff; }
+        body { background: var(--bg); color: white; margin: 0; font-family: sans-serif; }
+        .nav { position: fixed; top:0; width:100%; background: rgba(5,5,5,0.9); backdrop-filter: blur(10px); padding: 10px; display: flex; justify-content: center; gap: 8px; z-index:1000; border-bottom: 1px solid #222; transition: 0.3s; }
+        .nav-hidden { transform: translateY(-100%); }
+        .btn { color: white; text-decoration: none; background: #1a1a1a; padding: 10px; border-radius: 6px; font-size: 0.8rem; font-weight: bold; border: 1px solid #333; }
+        .btn:hover { border-color: var(--accent); }
+        .lector-img { width: 100%; max-width: 800px; display: block; margin: 0 auto; }
+    </style>
+</head>
+<body>
+    <div class="nav" id="navbar">
+        <a id="btnPrev" class="btn">⬅ Ant</a>
+        <a id="btnInfo" class="btn">Manhwa</a>
+        <a href="index.html" class="btn">Inicio</a>
+        <a id="btnNext" class="btn">Sig ➡</a>
+    </div>
+    <div id="container" style="padding-top:70px;"></div>
+    <script>
+        const p = new URLSearchParams(window.location.search);
+        const id = p.get('manga'), cap = parseInt(p.get('cap'));
+        document.getElementById('btnInfo').href = `info.html?manga=${id}`;
+        document.getElementById('btnNext').href = `lector.html?manga=${id}&cap=${cap + 1}`;
+        if(cap > 1) document.getElementById('btnPrev').href = `lector.html?manga=${id}&cap=${cap - 1}`;
+        else document.getElementById('btnPrev').style.display = "none";
+
+        let page = 1;
+        function load() {
+            const img = new Image();
+            img.src = `mangas/${id}/cap-${cap}/${String(page).padStart(3, '0')}.png`;
+            img.className = "lector-img";
+            img.onload = () => { document.getElementById('container').appendChild(img); page++; load(); };
+        }
+        load();
+
+        let lastScroll = 0;
+        window.onscroll = () => {
+            const nav = document.getElementById('navbar');
+            if(window.scrollY > lastScroll) nav.classList.add('nav-hidden');
+            else nav.classList.remove('nav-hidden');
+            lastScroll = window.scrollY;
+        };
+    </script>
+</body>
+</html>

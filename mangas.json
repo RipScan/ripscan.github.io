@@ -1,0 +1,34 @@
+[
+  {
+    "id": "rey-hongo",
+    "titulo": "El ascenso del Rey Hongo",
+    "imagen": "img/portadas/rey-hongo.jpg",
+    "totalCaps": 8,
+    "estado": "ongoing",
+    "sinopsis": "Yang Jun transmigra al cuerpo de un líder hombre-hongo en las mazmorras más bajas. Para sobrevivir, cultiva soldados hongo y guía a su pueblo en una conquista para elevarse sobre los demás."
+  },
+  {
+    "id": "mago-arena",
+    "titulo": "El mago de arena del desierto abrasador",
+    "imagen": "img/portadas/mago-arena.jpg",
+    "totalCaps": 20,
+    "estado": "ongoing",
+    "sinopsis": "La Tierra fue terraformada y los océanos se evaporaron. Zeon es el último mago de arena que queda en este mundo desertificado. El mundo lo llama el Espectro de Arena."
+  },
+  {
+    "id": "mago-margrave",
+    "titulo": "El mago sin valor del Margrave",
+    "imagen": "img/portadas/mago-margrave.jpg",
+    "totalCaps": 9,
+    "estado": "ongoing",
+    "sinopsis": "Isaac, un mago con poder para devorar el mundo, vuelve 60 años al pasado tras una vida de soledad y ruina. Esta es su segunda oportunidad para salvar lo que una vez perdió."
+  },
+  {
+    "id": "pequeno-mundo",
+    "titulo": "Un pequeño mundo lleno de diversion",
+    "imagen": "img/portadas/pequeno-mundo.jpg",
+    "totalCaps": 11,
+    "estado": "ongoing",
+    "sinopsis": "Mientras la humanidad buscaba un camino hacia la evolución, yo me convertí en su pionero. ¡Este es el viaje de un jugador que dobla el mundo a su voluntad como si fuera un juego!"
+  }
+]
