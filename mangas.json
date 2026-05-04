@@ -5,7 +5,8 @@
     "imagen": "img/portadas/rey-hongo.jpg",
     "totalCaps": 8,
     "estado": "ongoing",
-    "sinopsis": "Yang Jun transmigra al cuerpo de un líder hombre-hongo en las mazmorras más bajas. Para sobrevivir, cultiva soldados hongo y guía a su pueblo en una conquista para elevarse sobre los demás."
+    "sinopsis": "Yang Jun transmigra al cuerpo de un líder hombre-hongo en las mazmorras más bajas. Para sobrevivir, cultiva soldados hongo y guía a su pueblo en una conquista para elevarse sobre los demás.",
+    "ultimosCaps": []
   },
   {
     "id": "mago-arena",
@@ -13,7 +14,14 @@
     "imagen": "img/portadas/mago-arena.jpg",
     "totalCaps": 20,
     "estado": "ongoing",
-    "sinopsis": "La Tierra fue terraformada y los océanos se evaporaron. Zeon es el último mago de arena que queda en este mundo desertificado. El mundo lo llama el Espectro de Arena."
+    "sinopsis": "La Tierra fue terraformada y los océanos se evaporaron. Zeon es el último mago de arena que queda en este mundo desertificado. El mundo lo llama el Espectro de Arena.",
+    "ultimosCaps": [
+      { "numero": 20, "fecha": "2026-05-03T15:00:00", "bloqueado": false },
+      { "numero": 19, "fecha": "2026-05-03T15:00:00", "bloqueado": false },
+      { "numero": 18, "fecha": "2026-05-03T15:00:00", "bloqueado": false },
+      { "numero": 17, "fecha": "2026-05-03T15:00:00", "bloqueado": false },
+      { "numero": 16, "fecha": "2026-05-03T15:00:00", "bloqueado": false }
+    ]
   },
   {
     "id": "mago-margrave",
@@ -21,7 +29,11 @@
     "imagen": "img/portadas/mago-margrave.jpg",
     "totalCaps": 9,
     "estado": "ongoing",
-    "sinopsis": "Isaac, un mago con poder para devorar el mundo, vuelve 60 años al pasado tras una vida de soledad y ruina. Esta es su segunda oportunidad para salvar lo que una vez perdió."
+    "sinopsis": "Isaac, un mago con poder para devorar el mundo, vuelve 60 años al pasado tras una vida de soledad y ruina. Esta es su segunda oportunidad para salvar lo que una vez perdió.",
+    "ultimosCaps": [
+      { "numero": 8, "fecha": "2026-05-03T19:28:00", "bloqueado": false },
+      { "numero": 7, "fecha": "2026-05-03T19:28:00", "bloqueado": false }
+    ]
   },
   {
     "id": "pequeno-mundo",
@@ -29,6 +41,9 @@
     "imagen": "img/portadas/pequeno-mundo.jpg",
     "totalCaps": 11,
     "estado": "ongoing",
-    "sinopsis": "Mientras la humanidad buscaba un camino hacia la evolución, yo me convertí en su pionero. ¡Este es el viaje de un jugador que dobla el mundo a su voluntad como si fuera un juego!"
+    "sinopsis": "Mientras la humanidad buscaba un camino hacia la evolución, yo me convertí en su pionero. ¡Este es el viaje de un jugador que dobla el mundo a su voluntad como si fuera un juego!",
+    "ultimosCaps": [
+      { "numero": 11, "fecha": "2026-05-03T22:10:00", "bloqueado": false }
+    ]
   }
 ]
