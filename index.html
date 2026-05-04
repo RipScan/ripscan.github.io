@@ -22,7 +22,8 @@
         header { padding: 20px 6%; background: rgba(18, 18, 18, 0.95); backdrop-filter: blur(20px); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 1000; }
         
         .logo-container { cursor: pointer; display: flex; align-items: center; gap: 10px; }
-        .logo-icon { font-size: 2rem; color: var(--accent-primary); } /* AQUÍ ESTÁ EL ICONO */
+        .logo-icon { font-size: 2rem; color: var(--accent-primary); } 
+        .logo-text { font-weight: 800; font-size: 1.5rem; color: var(--accent-primary); letter-spacing: 1px; }
 
         .nav-menu { display: flex; gap: 30px; }
         .nav-menu a { color: var(--text-main); text-decoration: none; font-weight: 600; }
@@ -32,20 +33,22 @@
 
         /* Contenido */
         .container { padding: 40px 6%; }
-        h2 { font-size: 1.5rem; margin-bottom: 25px; color: var(--accent-primary); }
+        h2 { font-size: 1.5rem; margin-bottom: 25px; color: var(--text-main); } /* Títulos en blanco */
 
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 25px; margin-bottom: 60px; }
         .card { background: var(--bg-surface); border-radius: 12px; padding: 10px; border: 1px solid #222; text-decoration: none; color: white; transition: 0.3s; }
         .card:hover { transform: translateY(-5px); border-color: var(--accent-primary); }
         .card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 8px; }
-        .card h3 { font-size: 0.9rem; margin-top: 10px; }
+        .card h3 { font-size: 0.9rem; margin-top: 10px; color: var(--text-main); }
 
         /* Actualizaciones */
         .updates-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; }
         .update-card { display: flex; gap: 15px; background: #0d0d0d; padding: 15px; border-radius: 12px; border: 1px solid #222; }
         .update-thumb { width: 80px; height: 110px; object-fit: cover; border-radius: 6px; cursor: pointer; }
+        
         .chapter-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #222; }
-        .chapter-link { color: var(--accent-primary); text-decoration: none; font-size: 0.9rem; }
+        .chapter-link { color: var(--text-main); text-decoration: none; font-size: 0.9rem; transition: 0.2s; }
+        .chapter-link:hover { color: var(--accent-primary); } /* Efecto al pasar mouse */
         .chapter-time { color: var(--text-muted); font-size: 0.8rem; }
     </style>
 </head>
@@ -53,7 +56,9 @@
 
     <header>
         <div class="logo-container" onclick="location.href='index.html'">
-            <i class="fa-solid fa-skull logo-icon"></i> </div>
+            <i class="fa-solid fa-skull logo-icon"></i>
+            <span class="logo-text">RIPSCAN</span>
+        </div>
         <nav class="nav-menu">
             <a href="index.html">Inicio</a>
             <a href="mis-manhwas.html">Mis Manhwas</a>
@@ -110,7 +115,7 @@
                 <div class="update-card">
                     <img src="${m.imagen}" class="update-thumb" onclick="location.href='info.html?manga=${m.id}'">
                     <div style="flex-grow:1;">
-                        <h3 style="margin-bottom:10px;">${m.titulo}</h3>
+                        <h3 style="margin-bottom:10px; color:white;">${m.titulo}</h3>
                         ${m.ultimosCaps.map(c => `
                             <div class="chapter-row">
                                 <a href="lector.html?manga=${m.id}&cap=${c.numero}" class="chapter-link">Capítulo ${c.numero}</a>
