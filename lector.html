@@ -20,7 +20,7 @@
         body { background-color: var(--bg-deep); color: var(--text-main); font-family: 'Inter', sans-serif; line-height: 1.6; }
 
         /* Header Consistente */
-        header { padding: 20px 6%; background: rgba(18, 18, 18, 0.95); backdrop-filter: blur(20px); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 1000; }
+        header { padding: 20px 6%; background: rgba(18, 18, 18, 0.95); backdrop-filter: blur(20px); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 1000; transition: transform 0.3s ease-in-out; }
         .logo-container { cursor: pointer; display: flex; align-items: center; gap: 10px; }
         .logo-icon { font-size: 1.8rem; color: var(--accent-primary); }
         .logo-text { font-weight: 800; font-size: 1.5rem; color: var(--accent-primary); letter-spacing: 1px; }
@@ -37,7 +37,7 @@
         .mobile-nav a { color: white; text-decoration: none; font-weight: 600; font-size: 1.2rem; }
 
         /* Lector Nav */
-        .reader-nav { padding: 15px; display: flex; justify-content: center; gap: 15px; background: #0d0d0d; border-bottom: 1px solid #222; position: sticky; top: 75px; z-index: 900; }
+        .reader-nav { padding: 15px; display: flex; justify-content: center; gap: 15px; background: #0d0d0d; border-bottom: 1px solid #222; position: sticky; top: 75px; z-index: 900; transition: transform 0.3s ease-in-out; }
         .btn { color: white; text-decoration: none; background: #1a1a1a; padding: 10px 20px; border-radius: 6px; font-weight: 600; border: 1px solid #333; transition: 0.3s; }
         .btn:hover { border-color: var(--accent-primary); color: var(--accent-primary); }
         
@@ -45,7 +45,7 @@
 
         /* Responsive Mobile */
         @media (max-width: 600px) {
-            header { position: relative; padding: 15px 4%; }
+            header { position: sticky; padding: 15px 4%; }
             .nav-menu { display: none; }
             .menu-btn { display: block; }
             .logo-container { position: absolute; left: 50%; transform: translateX(-50%); }
@@ -121,6 +121,26 @@
         function handleSearch(e) { 
             if(e.key === 'Enter') window.location.href = `index.html?search=${e.target.value}`; 
         }
+
+        // Lógica de scroll para esconder Header y Reader Nav
+        let lastScrollTop = 0;
+        const header = document.querySelector('header');
+        const readerNav = document.querySelector('.reader-nav');
+
+        window.addEventListener('scroll', function() {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (scrollTop > lastScrollTop && scrollTop > 100) {
+                // Bajando: esconder
+                header.style.transform = 'translateY(-100%)';
+                readerNav.style.transform = 'translateY(-100%)';
+            } else {
+                // Subiendo: mostrar
+                header.style.transform = 'translateY(0)';
+                readerNav.style.transform = 'translateY(0)';
+            }
+            lastScrollTop = scrollTop;
+        });
     </script>
 </body>
 </html>
