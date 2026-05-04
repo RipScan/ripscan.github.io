@@ -18,7 +18,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background-color: var(--bg-deep); color: var(--text-main); font-family: 'Inter', sans-serif; line-height: 1.6; }
 
-        /* Header PC (No tocar) */
+        /* Header PC */
         header { 
             padding: 20px 6%; 
             background: var(--bg-deep); 
@@ -69,20 +69,19 @@
             header { padding: 10px 4%; }
             .logo-icon { font-size: 1.5rem; }
             .logo-text { font-size: 1.2rem; }
-            .nav-menu { gap: 15px; }
-            #search { width: 100px; padding: 6px 12px; font-size: 0.8rem; }
+            .nav-menu { display: none; } /* Opcional: esconde el menu o hazlo compacto si quieres más espacio */
+            #search { width: 120px; padding: 6px 12px; font-size: 0.8rem; }
             
-            /* Container y Grid más compacto */
-            .container { padding: 15px 4%; }
-            .grid { grid-template-columns: repeat(3, 1fr); gap: 4px; margin-bottom: 20px; }
-            .card { padding: 4px; } /* Tarjetas más pequeñas */
-            .card h3 { font-size: 0.65rem; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+            /* Grid 2 columnas (Tamaño promedio) */
+            .container { padding: 20px 4%; }
+            .grid { grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 30px; }
+            .card { padding: 8px; } 
+            .card h3 { font-size: 0.9rem; margin-top: 8px; } /* Tamaño promedio estándar */
             
             /* Actualizaciones */
             .updates-container { grid-template-columns: 1fr; }
-            .update-card { padding: 8px; gap: 8px; }
-            .update-thumb { width: 50px; height: 70px; }
-            .chapter-row { padding: 2px 0; }
+            .update-card { padding: 10px; gap: 10px; }
+            .update-thumb { width: 60px; height: 85px; }
         }
     </style>
 </head>
