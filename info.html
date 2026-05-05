@@ -19,18 +19,31 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background-color: var(--bg-deep); color: var(--text-main); font-family: 'Inter', sans-serif; line-height: 1.6; }
 
-        /* Header con 3 columnas */
-        header { padding: 15px 6%; background: rgba(18, 18, 18, 0.95); display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 1000; }
-        .header-left { flex: 1; display: flex; justify-content: flex-start; }
-        .header-center { flex: 1; display: flex; justify-content: center; }
-        .header-right { flex: 1; display: flex; justify-content: flex-end; }
+        /* Header Consistente */
+        header { 
+            padding: 20px 6%; background: rgba(18, 18, 18, 0.95); backdrop-filter: blur(10px);
+            display: grid; grid-template-columns: auto 1fr auto; align-items: center; 
+            border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 1000; 
+        }
 
-        .logo-text { font-weight: 800; font-size: 1.5rem; color: var(--accent-primary); cursor: pointer; }
+        .menu-trigger { font-size: 1.5rem; cursor: pointer; display: none; }
+        .logo-text { font-weight: 800; font-size: 1.5rem; color: var(--accent-primary); letter-spacing: 1px; cursor: pointer; text-align: center; }
+        
+        .header-right-side { display: flex; align-items: center; justify-content: flex-end; gap: 20px; }
         .nav-menu { display: flex; gap: 30px; }
         .nav-menu a { color: var(--text-main); text-decoration: none; font-weight: 600; }
         .nav-menu a:hover { color: var(--accent-primary); }
         #search { background: #1a1a1a; border: 1px solid #333; color: white; padding: 8px 15px; border-radius: 20px; width: 200px; }
         
+        /* Menú Móvil */
+        .mobile-menu { 
+            display: none; position: absolute; top: 75px; left: 0; width: 100%; 
+            background: var(--bg-surface); padding: 20px; border-bottom: 1px solid #333; z-index: 999;
+            flex-direction: column; gap: 15px; text-align: center;
+        }
+        .mobile-menu a { color: white; text-decoration: none; font-size: 1.1rem; font-weight: 600; }
+
+        /* Contenido */
         .container { padding: 40px 6%; max-width: 900px; margin: auto; }
         .manga-header { display: flex; gap: 30px; margin-bottom: 40px; background: var(--bg-surface); padding: 20px; border-radius: 12px; border: 1px solid #222; }
         .manga-header img { width: 200px; height: 300px; object-fit: cover; border-radius: 8px; }
@@ -50,25 +63,34 @@
 
         .btn-action { background: #1a1a1a; padding: 10px 20px; border-radius: 6px; text-decoration: none; color: white; border: 1px solid #333; display: inline-block; margin-right: 10px; font-size: 0.9rem; cursor: pointer;}
         
-        @media (max-width: 600px) { .manga-header { flex-direction: column; } .nav-menu { gap: 15px; font-size: 0.8rem; } }
+        /* Media Queries */
+        @media (max-width: 768px) {
+            .menu-trigger { display: block; }
+            .nav-menu { display: none; }
+            #search { width: 100px; }
+            .manga-header { flex-direction: column; }
+        }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="header-left">
-            <div class="logo-text" onclick="location.href='index.html'">RIPSCAN</div>
-        </div>
-        <div class="header-center">
+        <i class="fa-solid fa-bars menu-trigger" onclick="toggleMenu()"></i>
+        <div class="logo-text" onclick="location.href='index.html'">RIPSCAN</div>
+        
+        <div class="header-right-side">
             <nav class="nav-menu">
                 <a href="index.html">Inicio</a>
                 <a href="mis-manhwas.html">Mis Manhwas</a>
             </nav>
-        </div>
-        <div class="header-right">
             <input type="text" id="search" placeholder="Buscar..." onkeyup="handleSearch(event)">
         </div>
     </header>
+
+    <div id="mobileMenu" class="mobile-menu">
+        <a href="index.html">Inicio</a>
+        <a href="mis-manhwas.html">Mis Manhwas</a>
+    </div>
 
     <div class="container">
         <div class="manga-header">
@@ -94,9 +116,14 @@
     </div>
 
     <script>
+        function toggleMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.style.display = (menu.style.display === 'flex') ? 'none' : 'flex';
+        }
+
         const id = new URLSearchParams(window.location.search).get('manga');
         let mangaData = null;
-        let sortOrder = 'asc'; // Ascendente por defecto
+        let sortOrder = 'asc';
 
         function handleSearch(e) {
             if(e.key === 'Enter') window.location.href = `index.html?search=${e.target.value}`;
@@ -107,7 +134,6 @@
             renderChapters();
         }
 
-        // Favoritos
         function toggleFavorite() {
             let favs = JSON.parse(localStorage.getItem('favorites') || '[]');
             const btn = document.getElementById('btnFav');
@@ -132,7 +158,6 @@
         function toggleRead(event, mangaId, cap, element) {
             event.preventDefault();
             event.stopPropagation();
-            
             let read = JSON.parse(localStorage.getItem(`read_${mangaId}`) || '[]');
             if (read.includes(cap)) {
                 read = read.filter(c => c !== cap);
