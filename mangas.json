@@ -5,6 +5,7 @@
     "imagen": "img/portadas/rey-hongo.jpg",
     "totalCaps": 8,
     "estado": "ongoing",
+    "generos": ["Accion", "Fantasia", "Aventura", "Sistema de Niveles"],
     "sinopsis": "Yang Jun transmigra al cuerpo de un líder hombre-hongo en las mazmorras más bajas. Para sobrevivir, cultiva soldados hongo y guía a su pueblo en una conquista para elevarse sobre los demás.",
     "ultimosCaps": []
   },
@@ -14,6 +15,7 @@
     "imagen": "img/portadas/mago-arena.jpg",
     "totalCaps": 20,
     "estado": "ongoing",
+    "generos": ["Accion", "Fantasia", "Aventura", "Misterio"],
     "sinopsis": "La Tierra fue terraformada y los océanos se evaporaron. Zeon es el último mago de arena que queda en este mundo desertificado. El mundo lo llama el Espectro de Arena.",
     "ultimosCaps": [
       { "numero": 20, "fecha": "2026-05-03T15:00:00", "bloqueado": false },
@@ -29,6 +31,7 @@
     "imagen": "img/portadas/mago-margrave.jpg",
     "totalCaps": 9,
     "estado": "ongoing",
+    "generos": ["Accion", "Fantasia", "Aventura", "Magia"],
     "sinopsis": "Isaac, un mago con poder para devorar el mundo, vuelve 60 años al pasado tras una vida de soledad y ruina. Esta es su segunda oportunidad para salvar lo que una vez perdió.",
     "ultimosCaps": [
       { "numero": 8, "fecha": "2026-05-03T19:28:00", "bloqueado": false },
@@ -41,6 +44,7 @@
     "imagen": "img/portadas/pequeno-mundo.jpg",
     "totalCaps": 11,
     "estado": "ongoing",
+    "generos": ["Accion", "Aventura", "Ecchi", "Reencarnacion"],
     "sinopsis": "Mientras la humanidad buscaba un camino hacia la evolución, yo me convertí en su pionero. ¡Este es el viaje de un jugador que dobla el mundo a su voluntad como si fuera un juego!",
     "ultimosCaps": [
       { "numero": 11, "fecha": "2026-05-03T22:10:00", "bloqueado": false }

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RipScan | Biblioteca</title>
+    <link rel="icon" type="image/png" href="favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
@@ -18,101 +19,54 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background-color: var(--bg-deep); color: var(--text-main); font-family: 'Inter', sans-serif; line-height: 1.6; }
 
-        /* Header PC */
-        header { 
-            padding: 20px 6%; 
-            background: var(--bg-deep); 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            border-bottom: 1px solid #222; 
-            position: sticky; 
-            top: 0; 
-            z-index: 1000; 
-        }
-        
-        .logo-container { cursor: pointer; display: flex; align-items: center; gap: 10px; }
-        .logo-icon { font-size: 2rem; color: var(--accent-primary); } 
-        .logo-text { font-weight: 800; font-size: 1.5rem; color: var(--accent-primary); letter-spacing: 1px; }
-
+        /* Header */
+        header { padding: 20px 6%; background: var(--bg-deep); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222; position: sticky; top: 0; z-index: 1000; }
+        .logo-text { font-weight: 800; font-size: 1.5rem; color: var(--accent-primary); letter-spacing: 1px; cursor: pointer; }
         .nav-menu { display: flex; gap: 30px; }
         .nav-menu a { color: var(--text-main); text-decoration: none; font-weight: 600; }
         .nav-menu a:hover { color: var(--accent-primary); }
-
         #search { background: #1a1a1a; border: 1px solid #333; color: white; padding: 10px 20px; border-radius: 25px; width: 250px; }
 
-        /* Menú Hamburguesa (oculto en PC) */
-        .menu-btn { display: none; font-size: 1.5rem; cursor: pointer; color: white; }
-        .mobile-nav { display: none; position: absolute; top: 100%; left: 0; width: 100%; background: #111; padding: 20px; border-bottom: 1px solid #333; flex-direction: column; gap: 15px; }
-        .mobile-nav a { color: white; text-decoration: none; font-weight: 600; font-size: 1.2rem; }
-
-        /* Contenido */
+        /* Grid */
         .container { padding: 40px 6%; }
-        h2 { font-size: 1.5rem; margin-bottom: 25px; color: var(--text-main); }
-
-        /* Grid PC */
+        h2 { font-size: 1.5rem; margin-bottom: 25px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 25px; margin-bottom: 60px; }
         
-        .card { background: var(--bg-surface); border-radius: 12px; padding: 10px; border: 1px solid #222; text-decoration: none; color: white; transition: 0.3s; }
+        .card { position: relative; background: var(--bg-surface); border-radius: 12px; padding: 10px; border: 1px solid #222; text-decoration: none; color: white; transition: 0.3s; display: block;}
         .card:hover { transform: translateY(-5px); border-color: var(--accent-primary); }
         .card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 8px; }
-        .card h3 { font-size: 0.9rem; margin-top: 10px; color: var(--text-main); }
+        
+        /* Badge de estado sobre la imagen */
+        .status-badge { position: absolute; top: 18px; left: 18px; background: var(--accent-primary); color: white; padding: 3px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; z-index: 2; }
+        
+        .card h3 { font-size: 0.9rem; margin-top: 10px; }
+        .badges-container { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+        .badge { font-size: 0.65rem; background: #262626; color: #a1a1aa; padding: 2px 6px; border-radius: 4px; border: 1px solid #333; }
 
         /* Actualizaciones */
         .updates-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; }
         .update-card { display: flex; gap: 15px; background: #0d0d0d; padding: 15px; border-radius: 12px; border: 1px solid #222; }
         .update-thumb { width: 80px; height: 110px; object-fit: cover; border-radius: 6px; cursor: pointer; }
-        
         .chapter-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #222; }
-        .chapter-link { color: var(--text-main); text-decoration: none; font-size: 0.9rem; transition: 0.2s; }
+        .chapter-link { color: var(--text-main); text-decoration: none; font-size: 0.9rem; }
         .chapter-link:hover { color: var(--accent-primary); }
         .chapter-time { color: var(--text-muted); font-size: 0.8rem; }
 
-        /* --- AJUSTES CELULAR --- */
         @media (max-width: 600px) {
-            header { position: relative; padding: 10px 4%; }
-            .nav-menu { display: none; } /* Ocultar menú escritorio */
-            .menu-btn { display: block; } /* Mostrar hamburguesa */
-            
-            /* Logo centrado */
-            .logo-container { position: absolute; left: 50%; transform: translateX(-50%); }
-            .logo-icon { font-size: 1.5rem; }
-            .logo-text { font-size: 1.2rem; }
-            
-            /* Buscador más chico */
-            #search { width: 100px; padding: 6px 12px; font-size: 0.8rem; }
-            
-            /* Grid 2 columnas */
-            .container { padding: 20px 4%; }
-            .grid { grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 30px; }
-            
-            /* Actualizaciones */
-            .updates-container { grid-template-columns: 1fr; }
+            .grid { grid-template-columns: repeat(2, 1fr); }
+            #search { width: 120px; }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="menu-btn" onclick="toggleMenu()">
-            <i class="fa-solid fa-bars"></i>
-        </div>
-
-        <div class="logo-container" onclick="location.href='index.html'">
-            <span class="logo-text">RIPSCAN</span>
-        </div>
-
+        <div class="logo-text" onclick="location.href='index.html'">RIPSCAN</div>
         <nav class="nav-menu">
             <a href="index.html">Inicio</a>
             <a href="mis-manhwas.html">Mis Manhwas</a>
         </nav>
-
-        <input type="text" id="search" placeholder="Buscar..." onkeyup="handleSearch(event)">
-
-        <div class="mobile-nav" id="mobileMenu">
-            <a href="index.html">Inicio</a>
-            <a href="mis-manhwas.html">Mis Manhwas</a>
-        </div>
+        <input type="text" id="search" placeholder="Buscar..." onkeyup="handleSearch()">
     </header>
 
     <div class="container">
@@ -124,62 +78,61 @@
     </div>
 
     <script>
-        function toggleMenu() {
-            const menu = document.getElementById('mobileMenu');
-            menu.style.display = (menu.style.display === 'flex') ? 'none' : 'flex';
-        }
+        window.allData = [];
 
         function formatTimeAgo(isoDate) {
-            const now = new Date();
-            const past = new Date(isoDate);
-            const diff = now - past;
-            const mins = Math.floor(diff / 60000);
-            const hours = Math.floor(mins / 60);
-            const days = Math.floor(hours / 24);
+            const now = new Date(); const past = new Date(isoDate);
+            const diff = now - past; const mins = Math.floor(diff / 60000);
+            const hours = Math.floor(mins / 60); const days = Math.floor(hours / 24);
             if (mins < 1) return "Recién";
             if (mins < 60) return `Hace ${mins}m`;
             if (hours < 24) return `Hace ${hours}h`;
-            if (days < 7) return `Hace ${days}d`;
-            return `Hace ${Math.floor(days/7)}s`;
+            return `Hace ${days}d`;
         }
 
-        function handleSearch(e) {
+        function handleSearch() {
             const query = document.getElementById('search').value.toLowerCase();
             const filtered = window.allData.filter(m => m.titulo.toLowerCase().includes(query));
-            render(filtered);
+            renderGrid(filtered);
         }
 
-        function render(data) {
+        function renderGrid(data) {
             document.getElementById('mangaGrid').innerHTML = data.map(m => `
                 <a href="info.html?manga=${m.id}" class="card">
-                    <img src="${m.imagen}">
+                    <span class="status-badge">${m.estado === 'ongoing' ? 'En Emisión' : m.estado}</span>
+                    <img src="${m.imagen}" alt="${m.titulo}">
                     <h3>${m.titulo}</h3>
+                    <div class="badges-container">
+                        ${m.generos.map(g => `<span class="badge">${g}</span>`).join('')}
+                    </div>
                 </a>
             `).join('');
         }
 
-        fetch('mangas.json').then(res => res.json()).then(data => {
-            window.allData = data;
-            render(data);
-            
-            const conUpdates = data.filter(m => m.ultimosCaps && m.ultimosCaps.length > 0)
-                                   .sort((a,b) => new Date(b.ultimosCaps[0].fecha) - new Date(a.ultimosCaps[0].fecha));
+        fetch('mangas.json')
+            .then(res => res.json())
+            .then(data => {
+                window.allData = data;
+                renderGrid(data);
+                
+                const conUpdates = data.filter(m => m.ultimosCaps && m.ultimosCaps.length > 0)
+                                       .sort((a,b) => new Date(b.ultimosCaps[0].fecha) - new Date(a.ultimosCaps[0].fecha));
 
-            document.getElementById('latestUpdates').innerHTML = conUpdates.slice(0, 4).map(m => `
-                <div class="update-card">
-                    <img src="${m.imagen}" class="update-thumb" onclick="location.href='info.html?manga=${m.id}'">
-                    <div style="flex-grow:1;">
-                        <h3 style="margin-bottom:10px; color:white;">${m.titulo}</h3>
-                        ${m.ultimosCaps.map(c => `
-                            <div class="chapter-row">
-                                <a href="lector.html?manga=${m.id}&cap=${c.numero}" class="chapter-link">Capítulo ${c.numero}</a>
-                                <span class="chapter-time">${formatTimeAgo(c.fecha)}</span>
-                            </div>
-                        `).join('')}
+                document.getElementById('latestUpdates').innerHTML = conUpdates.slice(0, 4).map(m => `
+                    <div class="update-card">
+                        <img src="${m.imagen}" class="update-thumb" onclick="location.href='info.html?manga=${m.id}'">
+                        <div style="flex-grow:1;">
+                            <h3 style="margin-bottom:10px; color:white;">${m.titulo}</h3>
+                            ${m.ultimosCaps.map(c => `
+                                <div class="chapter-row">
+                                    <a href="lector.html?manga=${m.id}&cap=${c.numero}" class="chapter-link">Capítulo ${c.numero}</a>
+                                    <span class="chapter-time">${formatTimeAgo(c.fecha)}</span>
+                                </div>
+                            `).join('')}
+                        </div>
                     </div>
-                </div>
-            `).join('');
-        });
+                `).join('');
+            });
     </script>
 </body>
 </html>
