@@ -19,15 +19,34 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background-color: var(--bg-deep); color: var(--text-main); font-family: 'Inter', sans-serif; line-height: 1.6; }
 
-        /* Header */
-        header { padding: 20px 6%; background: var(--bg-deep); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222; position: sticky; top: 0; z-index: 1000; }
-        .logo-text { font-weight: 800; font-size: 1.5rem; color: var(--accent-primary); letter-spacing: 1px; cursor: pointer; }
-        .nav-menu { display: flex; gap: 30px; }
+        /* Header con Grid para centrado perfecto */
+        header { 
+            padding: 20px 6%; 
+            background: var(--bg-deep); 
+            display: grid; 
+            grid-template-columns: auto 1fr auto; 
+            align-items: center; 
+            border-bottom: 1px solid #222; 
+            position: sticky; top: 0; z-index: 1000; 
+        }
+
+        .menu-trigger { font-size: 1.5rem; cursor: pointer; display: none; } /* Oculto en escritorio */
+        .logo-text { font-weight: 800; font-size: 1.5rem; color: var(--accent-primary); letter-spacing: 1px; cursor: pointer; text-align: center; }
+        .nav-menu { display: flex; gap: 30px; margin-left: 20px; } /* Ocultar en celular */
         .nav-menu a { color: var(--text-main); text-decoration: none; font-weight: 600; }
         .nav-menu a:hover { color: var(--accent-primary); }
-        #search { background: #1a1a1a; border: 1px solid #333; color: white; padding: 10px 20px; border-radius: 25px; width: 250px; }
+        
+        #search { background: #1a1a1a; border: 1px solid #333; color: white; padding: 8px 15px; border-radius: 20px; width: 180px; }
 
-        /* Grid */
+        /* Menú Móvil (Oculto por defecto) */
+        .mobile-menu { 
+            display: none; position: absolute; top: 70px; left: 0; width: 100%; 
+            background: var(--bg-surface); padding: 20px; border-bottom: 1px solid #333; z-index: 999;
+            flex-direction: column; gap: 15px;
+        }
+        .mobile-menu a { color: white; text-decoration: none; font-size: 1.2rem; font-weight: 600; }
+
+        /* Grid de contenido */
         .container { padding: 40px 6%; }
         h2 { font-size: 1.5rem; margin-bottom: 25px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 25px; margin-bottom: 60px; }
@@ -35,10 +54,7 @@
         .card { position: relative; background: var(--bg-surface); border-radius: 12px; padding: 10px; border: 1px solid #222; text-decoration: none; color: white; transition: 0.3s; display: block;}
         .card:hover { transform: translateY(-5px); border-color: var(--accent-primary); }
         .card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 8px; }
-        
-        /* Badge de estado sobre la imagen */
-        .status-badge { position: absolute; top: 18px; left: 18px; background: var(--accent-primary); color: white; padding: 3px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; z-index: 2; }
-        
+        .status-badge { position: absolute; top: 18px; left: 18px; background: var(--accent-primary); color: white; padding: 3px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
         .card h3 { font-size: 0.9rem; margin-top: 10px; }
         .badges-container { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
         .badge { font-size: 0.65rem; background: #262626; color: #a1a1aa; padding: 2px 6px; border-radius: 4px; border: 1px solid #333; }
@@ -52,22 +68,36 @@
         .chapter-link:hover { color: var(--accent-primary); }
         .chapter-time { color: var(--text-muted); font-size: 0.8rem; }
 
-        @media (max-width: 600px) {
-            .grid { grid-template-columns: repeat(2, 1fr); }
+        /* Media Queries para Móvil */
+        @media (max-width: 768px) {
+            .menu-trigger { display: block; }
+            .nav-menu { display: none; } /* Ocultamos el menú grande */
             #search { width: 120px; }
+            .grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+            .updates-container { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
     <header>
+        <i class="fa-solid fa-bars menu-trigger" onclick="toggleMenu()"></i>
+        
         <div class="logo-text" onclick="location.href='index.html'">RIPSCAN</div>
-        <nav class="nav-menu">
-            <a href="index.html">Inicio</a>
-            <a href="mis-manhwas.html">Mis Manhwas</a>
-        </nav>
-        <input type="text" id="search" placeholder="Buscar..." onkeyup="handleSearch()">
+        
+        <div style="display: flex; align-items: center; justify-content: flex-end;">
+            <nav class="nav-menu">
+                <a href="index.html">Inicio</a>
+                <a href="mis-manhwas.html">Mis Manhwas</a>
+            </nav>
+            <input type="text" id="search" placeholder="Buscar..." onkeyup="handleSearch()" style="margin-left: 15px;">
+        </div>
     </header>
+
+    <div id="mobileMenu" class="mobile-menu">
+        <a href="index.html">Inicio</a>
+        <a href="mis-manhwas.html">Mis Manhwas</a>
+    </div>
 
     <div class="container">
         <h2>Biblioteca</h2>
@@ -78,6 +108,12 @@
     </div>
 
     <script>
+        // Función para abrir/cerrar menú
+        function toggleMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.style.display = (menu.style.display === 'flex') ? 'none' : 'flex';
+        }
+
         window.allData = [];
 
         function formatTimeAgo(isoDate) {
