@@ -34,6 +34,7 @@
     "generos": ["Accion", "Fantasia", "Aventura", "Magia"],
     "sinopsis": "Isaac, un mago con poder para devorar el mundo, vuelve 60 años al pasado tras una vida de soledad y ruina. Esta es su segunda oportunidad para salvar lo que una vez perdió.",
     "ultimosCaps": [
+      { "numero": 9, "fecha": "2026-05-06T21:04:00", "bloqueado": false },
       { "numero": 8, "fecha": "2026-05-03T19:28:00", "bloqueado": false },
       { "numero": 7, "fecha": "2026-05-03T19:28:00", "bloqueado": false }
     ]
