@@ -19,7 +19,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background-color: var(--bg-deep); color: var(--text-main); font-family: 'Inter', sans-serif; line-height: 1.6; }
 
-        /* Header con transición */
+        /* Header */
         header { 
             padding: 20px 6%; background: rgba(18, 18, 18, 0.95); backdrop-filter: blur(20px); 
             display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; 
@@ -27,6 +27,7 @@
             transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out; 
         }
 
+        .menu-btn { display: none; cursor: pointer; font-size: 1.2rem; } /* Oculto en PC */
         .logo-container { cursor: pointer; display: flex; align-items: center; gap: 10px; }
         .logo-text { font-weight: 800; font-size: 1.5rem; color: var(--accent-primary); letter-spacing: 1px; }
 
@@ -36,7 +37,15 @@
 
         #search { background: #1a1a1a; border: 1px solid #333; color: white; padding: 10px 20px; border-radius: 25px; width: 250px; }
 
-        /* Lector Nav con transición */
+        /* Menú Móvil (Oculto por defecto) */
+        .mobile-menu { 
+            display: none; position: absolute; top: 75px; left: 0; width: 100%; 
+            background: var(--bg-surface); padding: 20px; border-bottom: 1px solid #333; z-index: 999;
+            flex-direction: column; gap: 15px; text-align: center;
+        }
+        .mobile-menu a { color: white; text-decoration: none; font-size: 1.1rem; font-weight: 600; }
+
+        /* Lector Nav */
         .reader-nav { 
             padding: 15px; display: flex; justify-content: center; gap: 15px; 
             background: #0d0d0d; border-bottom: 1px solid #222; 
@@ -45,16 +54,15 @@
         }
         .btn { color: white; text-decoration: none; background: #1a1a1a; padding: 10px 20px; border-radius: 6px; font-weight: 600; border: 1px solid #333; transition: 0.3s; }
         .btn:hover { border-color: var(--accent-primary); color: var(--accent-primary); }
-        
         .lector-img { width: 100%; max-width: 800px; display: block; margin: 0 auto; }
 
-        /* Responsive Mobile */
+        /* Responsive */
         @media (max-width: 600px) {
             header { padding: 15px 4%; }
-            .nav-menu { display: none; }
-            .menu-btn { display: block; }
+            .menu-btn { display: block; } /* Mostrar en celular */
+            .nav-menu { display: none; } /* Ocultar menú escritorio */
             .logo-container { position: absolute; left: 50%; transform: translateX(-50%); }
-            #search { width: 100px; padding: 6px 12px; font-size: 0.8rem; }
+            #search { width: 80px; padding: 6px 12px; font-size: 0.8rem; }
             .reader-nav { top: 60px; } 
         }
     </style>
@@ -75,6 +83,11 @@
         <input type="text" id="search" placeholder="Buscar..." onkeyup="handleSearch(event)">
     </header>
 
+    <div id="mobileMenu" class="mobile-menu">
+        <a href="index.html">Inicio</a>
+        <a href="mis-manhwas.html">Mis Manhwas</a>
+    </div>
+
     <div class="reader-nav">
         <a id="btnPrev" class="btn">⬅ Ant</a>
         <a id="btnInfo" class="btn">Info</a>
@@ -84,7 +97,13 @@
     <div id="container" style="padding-top:20px;"></div>
 
     <script>
-        // 1. Lógica de Scroll mejorada
+        // Función para el menú hamburguesa
+        function toggleMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.style.display = (menu.style.display === 'flex') ? 'none' : 'flex';
+        }
+
+        // 1. Lógica de Scroll
         let lastScrollTop = 0;
         const header = document.querySelector('header');
         const readerNav = document.querySelector('.reader-nav');
@@ -105,7 +124,7 @@
             lastScrollTop = scrollTop;
         });
 
-        // 2. Configuración de parámetros
+        // 2. Configuración
         const p = new URLSearchParams(window.location.search);
         const id = p.get('manga'), cap = parseInt(p.get('cap'));
         document.getElementById('btnInfo').href = `info.html?manga=${id}`;
@@ -116,24 +135,16 @@
             document.getElementById('btnPrev').style.display = "none";
         }
 
-        // --- AUTOMATIZACIÓN (LEÍDO E HISTORIAL) ---
+        // --- AUTOMATIZACIÓN ---
         window.addEventListener('load', () => {
-            // A. Marcar como leído
             let readChapters = JSON.parse(localStorage.getItem(`read_${id}`) || '[]');
             if (!readChapters.includes(cap)) {
                 readChapters.push(cap);
                 localStorage.setItem(`read_${id}`, JSON.stringify(readChapters));
             }
-
-            // B. Actualizar historial (máximo 10 recientes)
-            let history = JSON.parse(localStorage.getItem('history') || '[]');
-            history = history.filter(item => item !== id); // Si ya estaba, quitamos duplicado
-            history.unshift(id); // Ponemos al inicio
-            history = history.slice(0, 10); // Limitamos a 10
-            localStorage.setItem('history', JSON.stringify(history));
         });
 
-        // 3. Sistema de carga en 3 pasos (Créditos -> Páginas -> Créditos)
+        // 3. Sistema de carga
         function loadSingleImage(filename, callback) {
             const img = new Image();
             img.src = `mangas/${id}/cap-${cap}/${filename}`;
